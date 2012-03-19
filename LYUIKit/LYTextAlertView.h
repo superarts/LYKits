@@ -1,8 +1,9 @@
 #import <UIKit/UIKit.h>
 #import "LYCategory.h"
 
-/*
- * example
+///	alert view with variable text fields
+/**
+ * EXAMPLE
  *
 	text_alert = [[LYTextAlertView alloc] initWithTitle:@"Reset Password" message:@"Please enter..." count:2];
 	text_alert.delegate = self;

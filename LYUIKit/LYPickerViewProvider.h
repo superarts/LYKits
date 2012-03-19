@@ -1,5 +1,6 @@
 #import "LYKits.h"
 
+///	simple provider model for picker views
 @interface LYPickerViewProvider: NSObject <UIPickerViewDelegate, UIPickerViewDataSource>
 {
 	NSMutableArray*		titles;

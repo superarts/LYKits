@@ -2,44 +2,17 @@
 #import <QuartzCore/QuartzCore.h>
 #import "LYCategory.h"
 
-/*
+@class LYTiledPDFView;
+@class LYPDFScrollView;
+
+///	a PDF viewer that supports zooming
+/**
+ * EXAMPLE
+\code
  LYPDFViewController* controller = [[LYPDFViewController alloc] init];
  [window addSubview:controller.view];
+\endcode
  */
-
-@interface LYTiledPDFView : UIView
-{
-	CGPDFPageRef pdfPage;
-	CGFloat myScale;
-}
-- (id)initWithFrame:(CGRect)frame andScale:(CGFloat)scale;
-- (void)setPage:(CGPDFPageRef)newPage;
-@end
-
-@interface LYPDFScrollView : UIScrollView <UIScrollViewDelegate>
-{
-	// The LYTiledPDFView that is currently front most
-	LYTiledPDFView *pdfView;
-	// The old LYTiledPDFView that we draw on top of when the zooming stops
-	LYTiledPDFView *oldPDFView;
-	
-	// A low res image of the PDF page that is displayed until the LYTiledPDFView
-	// renders its content.
-	UIImageView *backgroundImageView;
-
-	// current pdf zoom scale
-	CGFloat	pdfScale;
-	
-	CGPDFPageRef page;
-	CGPDFDocumentRef pdf;
-}
-- (NSInteger)load_pdf:(NSString*)a_filename;
-- (void)load_page:(int)index;
-- (void)unload_pdf;
-- (void)unload_page;
-- (CGRect)frame_to_center;
-@end
-
 @interface LYPDFViewController : UIViewController <UIScrollViewDelegate>
 {
 	NSString*			filename;
@@ -65,6 +38,41 @@
 - (BOOL)load_next;
 - (BOOL)load_previous;
 - (BOOL)test_frequency;
+@end
+
+///	PDF view helper class: tiling
+@interface LYTiledPDFView : UIView
+{
+	CGPDFPageRef pdfPage;
+	CGFloat myScale;
+}
+- (id)initWithFrame:(CGRect)frame andScale:(CGFloat)scale;
+- (void)setPage:(CGPDFPageRef)newPage;
+@end
+
+///	PDF view helper class: scrolling
+@interface LYPDFScrollView : UIScrollView <UIScrollViewDelegate>
+{
+	// The LYTiledPDFView that is currently front most
+	LYTiledPDFView *pdfView;
+	// The old LYTiledPDFView that we draw on top of when the zooming stops
+	LYTiledPDFView *oldPDFView;
+	
+	// A low res image of the PDF page that is displayed until the LYTiledPDFView
+	// renders its content.
+	UIImageView *backgroundImageView;
+
+	// current pdf zoom scale
+	CGFloat	pdfScale;
+	
+	CGPDFPageRef page;
+	CGPDFDocumentRef pdf;
+}
+- (NSInteger)load_pdf:(NSString*)a_filename;
+- (void)load_page:(int)index;
+- (void)unload_pdf;
+- (void)unload_page;
+- (CGRect)frame_to_center;
 @end
 
 #if 0

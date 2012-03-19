@@ -1,51 +1,14 @@
 #import <UIKit/UIKit.h>
 #import "LYKits.h"
 
-/*
- * 'Scroll tab' is a 'scroll bar' that contains series of buttons.
- */
-
+@class LYScrollTabController;
 @protocol LYScrollTabControllerDelegate;
 
-@interface LYScrollTabController: UIViewController
-{
-	id <LYScrollTabControllerDelegate>	delegate;
-	UIScrollView*						scroll_view;
-	NSMutableArray*						buttons;
-	NSInteger							count;
-}
-@property(nonatomic,retain)	UIScrollView*	scroll_view;
-@property(nonatomic,retain)	NSMutableArray*	buttons;
-@property(nonatomic,retain)	id				delegate;
-
-//	interface
-- (id)initWithFrame:(CGRect)frame delegate:(id)a_delegate;
-- (void)reload_data;
-
-//	internal
-- (void)action_button_pressed:(id)sender;
-- (void)reload_buttons;
-
-@end
-
-@protocol LYScrollTabControllerDelegate
-
-//	data source; *IMPORTANT* release must be handled for "alloc_xxx" messages manually
-- (NSInteger)scroll_tab_count:(LYScrollTabController*)controller_tab;
-- (CGSize)scroll_tab_size:(LYScrollTabController*)controller_tab;
-- (UIButton*)scroll_tab:(LYScrollTabController*)controller_tab alloc_button_for_index:(NSInteger)index;
-
-//	event handler
-- (void)scroll_tab:(LYScrollTabController*)controller_tab did_select_index:(NSInteger)index;
-
-@end
-
-
-/*
- * LYScrollTabBarController - based on LYScrollTabController, with similar interface as UITabBarController
+///	LYScrollTabBarController - based on LYScrollTabController, with similar interface as UITabBarController
+/**
+ * EXAMPLE
  *
- * sample code
- *
+\code
 	tab_main = [[LYScrollTabBarController alloc] init];
 	tab_main.height = 60;
 	[tab_main.data addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -59,9 +22,9 @@
 	tab_main.index = 0;
 	[self.window addSubview:tab_main.view];
 	[tab_main reload];
+\endcode
  *
  */
-
 @interface LYScrollTabBarController: UIViewController <LYScrollTabControllerDelegate>
 {
 	LYScrollTabController*	scroll_tab;
@@ -87,5 +50,41 @@
 - (void)hide_end;
 - (void)show_half:(CGFloat)duration;
 - (void)hide_half:(CGFloat)duration;
+
+@end
+
+
+///	'Scroll tab' is a 'scroll bar' that contains series of buttons. Helper class of LYScrollTabBarController
+@interface LYScrollTabController: UIViewController
+{
+	id <LYScrollTabControllerDelegate>	delegate;
+	UIScrollView*						scroll_view;
+	NSMutableArray*						buttons;
+	NSInteger							count;
+}
+@property(nonatomic,retain)	UIScrollView*	scroll_view;
+@property(nonatomic,retain)	NSMutableArray*	buttons;
+@property(nonatomic,retain)	id				delegate;
+
+//	interface
+- (id)initWithFrame:(CGRect)frame delegate:(id)a_delegate;
+- (void)reload_data;
+
+//	internal
+- (void)action_button_pressed:(id)sender;
+- (void)reload_buttons;
+
+@end
+
+///	LYScrollTabController helper protocol
+@protocol LYScrollTabControllerDelegate
+
+//	data source; *IMPORTANT* release must be handled for "alloc_xxx" messages manually
+- (NSInteger)scroll_tab_count:(LYScrollTabController*)controller_tab;
+- (CGSize)scroll_tab_size:(LYScrollTabController*)controller_tab;
+- (UIButton*)scroll_tab:(LYScrollTabController*)controller_tab alloc_button_for_index:(NSInteger)index;
+
+//	event handler
+- (void)scroll_tab:(LYScrollTabController*)controller_tab did_select_index:(NSInteger)index;
 
 @end

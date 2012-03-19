@@ -2,8 +2,11 @@
 #import <UIKit/UIKit.h>
 #import "LYPublic.h"
 
-//	sample code
-#if 0
+///	advanced provider model for table views
+/**	
+ * EXAMPLE
+ *
+\code
 	provider_menu = [[LYTableViewProvider alloc] initWithTableView:table_menu];
 	provider_menu.delegate = self;
 	provider_menu.style = UITableViewCellStyleValue1;
@@ -13,7 +16,8 @@
 	[provider_menu.texts add_array:@"Another Plain", @"Another Grouped", nil];
 	[provider_menu.details add_array:@"Another Plain 1", @"Another Grouped 1", nil];
 	[provider_menu.details add_array:@"Another Plain 2", @"Another Grouped 2", nil];
-#endif
+\endcode
+ */
 
 @interface LYTableViewProvider: NSObject <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 {

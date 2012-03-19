@@ -1,6 +1,7 @@
 #import "LYKits.h"
 #import <unistd.h>
 
+///	a 'the element' style spinning animation image view
 @interface LYSpinImageView: UIImageView
 {
 	NSMutableArray*	image_names;

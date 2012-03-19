@@ -1,8 +1,9 @@
 #import "LYPublic.h"
 #import <MessageUI/MessageUI.h>
 
-/*
- * example
+///	Facebook helper class; Facebook iOS library required
+/**
+ * EXAMPLE
  *
 	LYShareController* controller_share;
 	controller_share = [[LYShareController alloc] init];
@@ -11,9 +12,9 @@
 	controller_share.message = s;
 	[controller_share show];
  */
-
 @class LYFacebook;
 
+///	simple share controller; please use ShareKit for more generic sharing
 @interface LYShareController: NSObject <MFMailComposeViewControllerDelegate>
 {
 	UINavigationController*			navigation_controller;
