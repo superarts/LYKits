@@ -2,7 +2,9 @@
 #import <UIKit/UIKit.h>
 #import "LYCategory.h"
 
+///	helper class for Game Center
 /*
+\code
 	//	init
 	gc = [[LYGCController alloc] initWithDelegate:self];
 	gc.nav = nav;
@@ -25,8 +27,8 @@
 
 	[gc show_leaderboard];
 	[gc show_achievement];
+\endcode
  */
-
 @interface LYGCController: UIViewController
 	<GKLeaderboardViewControllerDelegate,
 	 GKAchievementViewControllerDelegate>

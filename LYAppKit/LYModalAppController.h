@@ -9,10 +9,12 @@
 #define k_ly_nav_button_right_bg	@"inner_back.png"
 #define k_ly_fixed_tab_bg			@"footer_bg.png"
 
+///	helper protocol for LYModalAppController
 @protocol LYModalAppSubview
 - (id)initWithArray:(NSArray*)array delegate:(id)delegate frame:(CGRect)frame;
 @end
 
+///	helper class for non-navigation controller based projects
 @interface LYModalAppController: UIViewController
 {
 	id				delegate;

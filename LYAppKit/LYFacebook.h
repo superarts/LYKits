@@ -3,7 +3,10 @@
 #ifdef LY_ENABLE_SDK_FACEBOOK
 #	import "FBConnect.h"
 
-/*
+/// ios warp of the official sdk
+/**
+ * sdk/facebook-ios-sdk is required
+\code
 	// launch
 	fb = [[LYFacebook alloc] init];
 
@@ -19,8 +22,8 @@
 {
 	if (fb) return [fb.facebook handleOpenURL:url]; else return NO; 
 }
+\endcode
 */
-
 @interface LYFacebook: NSObject	<FBRequestDelegate, FBSessionDelegate, FBDialogDelegate>
 {
 	NSString* key;

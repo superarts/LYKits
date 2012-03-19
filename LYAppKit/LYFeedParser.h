@@ -2,6 +2,7 @@
 #import "MWFeedParser.h"
 #import "NSString+HTML.h"
 
+///	feed parser based on MWFeedParser
 @interface LYFeedParser: NSObject <MWFeedParserDelegate>
 {
 	MWFeedParser*	parser;

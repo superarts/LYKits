@@ -4,16 +4,23 @@
 #import "MobclixAds.h"
 #import "LYPublic.h"
 
-/*
+#define k_ads_asianboobs		0
+#define k_ads_hotgirls			1
+#define k_ads_modmyi			2
+
+#define k_ads_mobclix_refresh	30.0
+
+///	helper class for various ads networks
+/**
  * TODO
  *
  * 	Add frameworks
  *	Other linker flags: add "-ObjC"
- *	Sample code - check LYStoreController.h
+ *	Example - check LYStoreController.h
  *
- */
-
-/*
+ * FRAMEWORK LIST
+ *
+\code
    Foundation.framework
    UIKit.framework
 
@@ -29,14 +36,8 @@
 
    libAdRollDevice.a
    libAdRollSimulator.a
+\endcode
 */
-
-#define k_ads_asianboobs		0
-#define k_ads_hotgirls			1
-#define k_ads_modmyi			2
-
-#define k_ads_mobclix_refresh	30.0
-
 @interface LYAdsController: UIViewController <ARRollerDelegate, MobclixAdViewDelegate>
 {
 	int					app_id;

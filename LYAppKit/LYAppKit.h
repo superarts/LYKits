@@ -30,7 +30,7 @@
  * 		see LYCategory/LYString for usage
  * 
  * LYModalAppController
- *		cibibank only, already removed from LYAppKit
+ *		old code, already removed from LYAppKit
  *
  * LYAdsController
  * LYStoreController

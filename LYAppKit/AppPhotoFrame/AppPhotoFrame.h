@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "LYPublic.h"
 
+///	a photo frame app controller
 @interface AppPhotoFrame: LYAppController
 {
 	IBOutlet UINavigationBar*		navigationBar;

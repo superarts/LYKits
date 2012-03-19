@@ -1,9 +1,11 @@
 #import <StoreKit/StoreKit.h>
 #import "LYCategory.h"
 
-/*
- * Example:
+///	helper class for StoreKit
+/**
+ * EXAMPLE
  *
+\code
 - (void)init_store_ads
 {
 	controller_store = [[LYStoreController alloc] initWithString:@"tao.soft.miniapps.torchlight.unlock"];
@@ -54,7 +56,7 @@
 {
 	[controller_ads hide_ads];
 }
-
+\endcode
  */
 
 @interface LYStoreController: UIViewController <UIActionSheetDelegate, 
