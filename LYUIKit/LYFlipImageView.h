@@ -8,10 +8,11 @@
 #	import "supersound.h"
 #endif
 
-/*
+///	split-flap style image view; based on some categories
+/**
  * example
  *
-
+\code
 - (void)apply_flip:(LYFlipImageView*)an_image
 {
 	int i;
@@ -24,7 +25,7 @@
 	}
 	[an_image reload];
 }
-
+\endcode
 */
 
 @interface LYFlipImageView: UIImageView

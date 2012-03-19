@@ -1,6 +1,7 @@
 #import <UIKit/UIKit.h>
 #import "LYPublic.h"
 
+///	in-app internet browser
 @interface LYBrowserController: UIViewController
 {
 	IBOutlet UIWebView*			web_view;

@@ -1,8 +1,10 @@
 #import "LYPublic.h"
 
-/*
+/// movable button matrix, can be added to a scroll view
+/**
  * EXAMPLE
  *
+\code
 	matrix = [[LYButtonMatrixController alloc] initWithFrame:CGRectMake(0, 20, 320, 460) count:9 named:@"settings.xml"];
 	matrix.delegate = self;
 	matrix.column = 3;
@@ -22,11 +24,12 @@
 	[matrix refresh];
  *
  * To support iPad, in
- * 	- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
+  	- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation
  * Add
- * 	[UIView begin_animations:0.3];
- * 	[matrix_main refresh];
- * 	[UIView commitAnimations];
+  	[UIView begin_animations:0.3];
+  	[matrix_main refresh];
+  	[UIView commitAnimations];
+\endcode
  *
  */
 

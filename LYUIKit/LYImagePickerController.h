@@ -1,5 +1,6 @@
 #import "LYPublic.h"
 
+///	image picker ui wrap
 @interface LYImagePickerController: UIViewController
 {
 	IBOutlet UIImagePickerController*	picker;

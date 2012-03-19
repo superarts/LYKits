@@ -36,8 +36,7 @@ UIView* ly_alloc_view_loading(void);
  * 		scrollable tab controller
  *
  * LYTableViewProvider
- * 		advanced data source of UITableView
- * 		best practise: static tables (see project iphone/pacard)
+ * 		advanced data source of UITableView, easy static tables for iOS 2.0+
  *
  * LYButtonMatrixController
  * 		movable button matrix
@@ -80,5 +79,9 @@ UIView* ly_alloc_view_loading(void);
 @end
 #endif
 
+///	for orientation fixing in IB
+/**
+ * if navigation controller acts weird in landscape mode, change the classes of some views in IB to this one
+ */
 @interface LYRotateViewController: UIViewController
 @end

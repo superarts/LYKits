@@ -1,8 +1,10 @@
 #import "LYKits.h"
 
-/*
- * usage:
+///	present a list for user to choose an item from
+/**
+ * EXAMPLE
  *
+\code
 	list_controller = [[LYListController alloc] initWithNav:nav_local];
 	list_controller.delegate = self;
  
@@ -15,6 +17,7 @@
 {
 	[@"setting_country" setting_string:[list_controller.dict valueForKey:key]];
 }
+\endcode
  *
  */
 

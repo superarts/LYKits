@@ -9,47 +9,18 @@
 #import "Texture2D.h"
 #import "LYCategory.h"
 
-/*
- * example
- *
+@class LYES1Renderer;
+
+///	3D image view with gravity support
+/**
+ * EXAMPLE
+\code
 	image_3d = [[LY3DImageView alloc] initWithFrame:CGRectMake(10, 380, 80, 80)];
 	[image_3d set_image:@"Icon.png"];
 	[image_3d set_color:[UIColor colorWithWhite:0.4 alpha:1]];
 	[image_3d set_mode:1];
+\endcode
  */
-
-#if 0
-@protocol LYESRenderer <NSObject>
-- (void)render;
-- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
-- (void)set_image:(NSString*)filename;
-@end
-#endif
-
-//@interface LYES1Renderer : NSObject <LYESRenderer, UIAccelerometerDelegate>
-@interface LYES1Renderer : NSObject <UIAccelerometerDelegate>
-{
-	NSInteger		mode;
-	UIColor*		color_bg;
-@private
-    EAGLContext *context;
-    GLint backingWidth;
-    GLint backingHeight;
-    GLuint defaultFramebuffer, colorRenderbuffer;
-	Texture2D*	texture_ground;
-	GLfloat		accel[3];
-}
-@property (nonatomic) NSInteger				mode;
-@property (nonatomic, retain) UIColor*		color_bg;
-- (void)render;
-- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
-//- (void)set_image:(NSString*)filename;
-- (void)set_image:(UIImage*)image;
-- (void)enable_accelerometer;
-- (void)disable_accelerometer;
-- (void)draw_image_bg;
-@end
-
 @interface LY3DImageView : UIView
 {    
     LYES1Renderer* 		renderer;
@@ -75,3 +46,36 @@
 //TODO - (void)set_target:(id)delegate selector:(SEL)action;
 
 @end
+
+///	3D view helper
+//@interface LYES1Renderer : NSObject <LYESRenderer, UIAccelerometerDelegate>
+@interface LYES1Renderer : NSObject <UIAccelerometerDelegate>
+{
+	NSInteger		mode;
+	UIColor*		color_bg;
+@private
+    EAGLContext *context;
+    GLint backingWidth;
+    GLint backingHeight;
+    GLuint defaultFramebuffer, colorRenderbuffer;
+	Texture2D*	texture_ground;
+	GLfloat		accel[3];
+}
+@property (nonatomic) NSInteger				mode;
+@property (nonatomic, retain) UIColor*		color_bg;
+- (void)render;
+- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
+//- (void)set_image:(NSString*)filename;
+- (void)set_image:(UIImage*)image;
+- (void)enable_accelerometer;
+- (void)disable_accelerometer;
+- (void)draw_image_bg;
+@end
+
+#if 0
+@protocol LYESRenderer <NSObject>
+- (void)render;
+- (BOOL)resizeFromLayer:(CAEAGLLayer *)layer;
+- (void)set_image:(NSString*)filename;
+@end
+#endif

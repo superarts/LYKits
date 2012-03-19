@@ -2,6 +2,7 @@
 #import "LYKits.h"
 //#import "LYCategory.h"
 
+///	multiple-thread downloading
 @interface LYAsyncImageView: UIImageView 
 {
     NSURLConnection*	connection;

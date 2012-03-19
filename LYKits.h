@@ -6,10 +6,20 @@
 #	import <MapKit/MapKit.h>
 #endif
 
+/** \mainpage About LYKits
+ * LYKits is a shared iOS library. To install, simply drag the LYKits folder into your Xcode project, and remove some files you don't need.
+ * For more information, check the LYKits page for details.
+ */
+
 #define ly	LYKits
 
-//	LYKits.h = MYPublic.h + LYKits Singleton Class
-
+///	LYKits.h = MYPublic.h + LYKits Singleton Class
+/**
+ *	#include "LYKits.h" to use all the functions LYKits provides, including the singleton class LYKits.
+ *	About the pre-defined macros, see LYPublic.h
+ *	Most of the components of LYKits are not compatible with ARC currently, so please add fno-objc-arc as build flags. You can find the ARC helper macros in LYPublic.h though, which will be used in future so that LYKits will be fully compatible with ARC.
+ *
+ */
 @interface LYKits: LYSingletonClass
 {
     NSString*				version;
@@ -41,6 +51,7 @@
 
 + (void)perform_after:(NSTimeInterval)delay block:(void(^)(void))block;
 + (void)debug_dump_font;
++ (BOOL)no_backup:(NSString*)url;		///< disable icloud backup
 
 + (NSDate*)gregorian_date:(NSString*)str;
 + (NSString*)gregorian_string:(NSDate*)date;
@@ -69,8 +80,6 @@
 + (uint64_t)benchmark_disk_write;
 + (uint64_t)benchmark_disk_read;
 + (uint64_t)benchmark_colibrate:(uint64_t)u64;
-
-+ (BOOL)no_backup:(NSString*)url;
 
 @end
 

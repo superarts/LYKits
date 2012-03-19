@@ -1,8 +1,10 @@
 #import "LYPublic.h"
 
-/*
+///	customized keyboard that supports dovrak layout, etc.
+/**
  * example
  *
+\code
 	UILabel* label_keyboard = [[UILabel alloc] initWithFrame:CGRectMake(0, 100, 320, 100)];
 	label_keyboard.text = @"";
 	[window addSubview:label_keyboard];
@@ -18,7 +20,7 @@
 {
 	return nav_main.view;
 }
-
+\endcode
  */
 
 @class LYButtonMatrixController;

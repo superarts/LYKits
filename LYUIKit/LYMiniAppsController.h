@@ -5,6 +5,7 @@
 
 @class LYBrowserController;
 
+///	mini apps including flashlight, fullscreen image, etc.
 @interface LYMiniAppsController: UIViewController <MFMailComposeViewControllerDelegate>
 {
 	UINavigationController*	nav;

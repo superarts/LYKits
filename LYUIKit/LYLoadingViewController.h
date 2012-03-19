@@ -1,7 +1,8 @@
 //#import <Foundation/Foundation.h>
 #import "LYPublic.h"
 
-/*
+///	synchronized loading view with label support
+/**
  * example
  *
  	[LYLoading enable_label:nil];
