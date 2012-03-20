@@ -8,6 +8,7 @@
  *
  */
 
+///	place manager that implementes CLLocationManagerDelegate and MKReverseGeocoderDelegate
 #if 1
 @interface LYPlaceManager: NSObject <CLLocationManagerDelegate, MKReverseGeocoderDelegate>
 {

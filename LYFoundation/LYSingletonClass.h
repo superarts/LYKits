@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+///	template of all the singleton classes like LYCache, LYRandom, etc.
 @interface LYSingletonClass: NSObject
 @end
 
@@ -8,6 +9,7 @@
 
 #pragma mark Singleton Example
 
+///	sington class example
 @interface MySingletonClass: LYSingletonClass
 {
     NSString*		property;

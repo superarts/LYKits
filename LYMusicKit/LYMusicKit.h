@@ -3,8 +3,9 @@
 #import "LYImage.h"
 #import "LYKits.h"
 
-/*
- * Usage of Music Jukebox
+///	music player that replaces LYMusicJukeboxController
+/**
+ * Usage of Music Player & Jukebox
  *
 	The following frameworks are needed:
 		AVFoundation

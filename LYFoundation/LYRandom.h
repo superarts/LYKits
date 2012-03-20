@@ -1,6 +1,7 @@
 #import "LYSingletonClass.h"
 #import "LYCategory.h"
 
+///	random colors, fonts, etc.
 @interface LYRandom: LYSingletonClass
 {
     //NSString*		property;

@@ -8,6 +8,12 @@
 
 #define k_ly_cache_filename	@"ly_cache_data.xml"
 
+///	generic cache class; also supports internet downloading
+/**	
+ * downloading and caching contents of urls
+ * can be used to passing objects between multiple classes
+ *
+ */
 @interface LYCache: LYSingletonClass
 {
 	NSMutableDictionary*			data;

@@ -1,6 +1,10 @@
 #import <UIKit/UIKit.h>
 #import <MapKit/MKMapView.h>
 
+///	basic map annotation that implements the MKAnnotation protocol
+/**
+ 	basic annotation class with title, subtitle, and coordinate
+ */
 @interface LYAnnotation: NSObject <MKAnnotation>
 {
 	CLLocationCoordinate2D  coordinate;

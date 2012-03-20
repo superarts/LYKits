@@ -9,6 +9,20 @@
 /** \mainpage About LYKits
  * LYKits is a shared iOS library. To install, simply drag the LYKits folder into your Xcode project, and remove some files you don't need.
  * For more information, check the LYKits page for details.
+ *
+ * COMPONENTS
+- LYAppKit - Helper classes for other frameworks or libraries
+- LYCategory - Extension messages for common CocoaTouch classes
+- LYFoundation - Extended classes based on Cocoa
+- LYMapKit - Extended classes based on MapKit
+- LYMusicKit - Extended classes based on MediaPlayer
+- LYServiceKit - Extended classes based on various web services
+- LYUIKit - Extended classes based on UIKits
+- external - 3rd-party libraries
+- script - Helper scripts
+- snippet - Code snippets
+- template - Xcode project examples with LYKits already included
+ *
  */
 
 #define ly	LYKits

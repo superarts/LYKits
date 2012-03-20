@@ -4,6 +4,7 @@
 
 @class LYAppController;
 
+///	Helper class for LYAppController
 @interface LYAppDelegate: NSObject <UIApplicationDelegate>
 {
 	UINavigationController*		nav;

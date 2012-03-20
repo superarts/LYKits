@@ -2,7 +2,7 @@
 
 @protocol LYMusicJukeboxTableViewControllerDelegate; // forward declaration
 
-
+///	helper class for LYMusicJukeboxController
 @interface LYMusicJukeboxTableViewController : UIViewController <MPMediaPickerControllerDelegate, UITableViewDelegate> {
 
 	id <LYMusicJukeboxTableViewControllerDelegate>	delegate;
@@ -20,7 +20,7 @@
 @end
 
 
-
+///	helper protocol for LYMusicJukeboxTableViewController
 @protocol LYMusicJukeboxTableViewControllerDelegate
 
 // implemented in LYMusicJukeboxController.m

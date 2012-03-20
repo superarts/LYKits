@@ -9,6 +9,10 @@
 #import "LYMusicJukeboxTableViewController.h"
 //#import "AddMusicAppDelegate.h"
 
+///	a jukebox controller; for flexibility use LYMusicPlayer instead
+/**
+ * for the most basic jukebox, see example in LYMusicPlayer
+ */
 @interface LYMusicJukeboxController : UIViewController <MPMediaPickerControllerDelegate, LYMusicJukeboxTableViewControllerDelegate, AVAudioPlayerDelegate> {
 
 	//AddMusicAppDelegate			*applicationDelegate;

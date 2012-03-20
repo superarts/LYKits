@@ -3,6 +3,7 @@
 
 @class LYAppDelegate;
 
+///	Helper class for build-in type apps
 @interface LYAppController: UIViewController
 {
 	LYAppDelegate*				delegate;
