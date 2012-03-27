@@ -1,5 +1,6 @@
 #import "LYServiceKit.h"
 
+///	lyric wiki service
 #ifdef LY_ENABLE_SDK_ASIHTTP
 @interface LYServiceLyricWiki: NSObject
 {

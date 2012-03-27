@@ -22,6 +22,7 @@
 
 @class LYTextAlertView;
 
+///	outdated database service, use aws instead
 #ifdef LY_ENABLE_SDK_ASIHTTP
 @interface LYDatabase: NSObject
 {

@@ -1,5 +1,6 @@
 #import "LYServiceKit.h"
 
+///	face detection from face.com
 #ifdef LY_ENABLE_SDK_ASIHTTP
 @interface LYServiceFaceDotCom: NSObject
 {

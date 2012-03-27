@@ -1,7 +1,10 @@
 #import "LYServiceKit.h"
 //	#import "LYUIKit.h"
 
-/*
+///	service ui
+/**
+ * EXAMPLE
+\code
 	suar = [[LYSuarViewController alloc] init];
 	suar.delegate = self;
 	[suar loadView];
@@ -16,7 +19,7 @@
 {
 	[nav presentModalViewController:suar.tab animated:YES];
 }
-
+\endcode
 */
 
 #ifdef LY_ENABLE_SDK_AWS

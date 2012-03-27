@@ -1,5 +1,6 @@
 #import "LYServiceKit.h"
 
+///	helper class for aws service
 #ifdef LY_ENABLE_SDK_AWS
 @interface LYServiceAWS: NSObject
 {
