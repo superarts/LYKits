@@ -8,6 +8,8 @@ if ($argc < 2)
 }
 $url = $argv[1];
 $url = urlencode($url);
-echo "https://www.google.com/reader/public/atom/feed/$url\n";
+$out = "https://www.google.com/reader/public/atom/feed/$url";
+echo "$out\n";
+system("echo '$out' | pbcopy");
 
 ?>
