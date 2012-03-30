@@ -1,4 +1,5 @@
 #import "LYFacebook.h"
+#import "CJSONSerializer.h"
 
 #ifdef LY_ENABLE_SDK_FACEBOOK
 @implementation LYFacebook
@@ -75,8 +76,10 @@
 {
 	NSMutableDictionary *params = [NSMutableDictionary dictionaryWithObjectsAndKeys:
 		image, @"source", 
-		s, @"message",             
+		s, @"message",
+		//@"http://www.mpiremedia.com.au", @"link",
 		nil];
+	NSLog(@"posting %@", params);
 	//	[facebook requestWithGraphPath:[NSString stringWithFormat:@"/me/photos?access_token=%@", self.facebook.accessToken]
 	//						 andParams:params andHttpMethod:@"POST" andDelegate:self];
 	[facebook requestWithGraphPath:@"/me/photos/" andParams:params andHttpMethod:@"POST" andDelegate:self];
