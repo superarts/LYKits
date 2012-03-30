@@ -14,14 +14,18 @@ public:
 	//virtual void update(ccTime dt);
 	//LAYER_NODE_FUNC(LYCCMetroItem);
 
-	float weight;
-	float counter;
+	int pos_head;
+	int pos_tail;
 
-	static LYCCMetroItem* itemFromString(const char *value, SelectorProtocol* target, SEL_MenuHandler selector)
+	static LYCCMetroItem* itemFromString(const char *value, CCObject* target, SEL_MenuHandler selector, 
+			int head, int tail)
 	{
 		LYCCMetroItem* item = new LYCCMetroItem();
 		item->initFromString(value, target, selector);
 		item->autorelease();
+
+		item->pos_head = head;
+		item->pos_tail = tail;
 
 		CCLayerColor* layer = CCLayerColor::layerWithColorWidthHeight(ccc4(0x00, 0xFF, 0x00, 0xFF), 
 		//		item->boundingBox().size.width, 
@@ -38,7 +42,7 @@ public:
 		return item;
 	}
 #if 0
-	bool initFromString(const char *value, SelectorProtocol* target, SEL_MenuHandler selector)
+	bool initFromString(const char *value, CCObject* target, SEL_MenuHandler selector)
 	{
 		//	CCAssert( value != NULL && strlen(value) != 0, "Value length must be greater than 0");
 		if (CCMenuItemFont::itemFromString(value, target, selector))

@@ -69,7 +69,8 @@ bool MainMenu::init()
 	{
 		stringstream ss;
 		ss << "Item " << i;
-		LYCCMetroItem* item = LYCCMetroItem::itemFromString(ss.str().c_str(), this, menu_selector(MainMenu::onTest));
+		LYCCMetroItem* item = LYCCMetroItem::itemFromString(ss.str().c_str(), this, menu_selector(MainMenu::onTest), 
+				i, i);
 #if 0
 		if (i == 0)
 			menu = CCMenu::menuWithItem(item);
