@@ -133,4 +133,27 @@ if ($content != $content_new)
 	}
 }
 
+/*
+	change file path
+ */
+if (isset($arg['opt']['n']))
+{
+	$pid_new = $arg['opt']['n'];
+	$path_old = $path . "src/" . str_replace('.', '/', $pid);
+	$path_new = $path . "src/" . str_replace('.', '/', $pid_new);
+	$cmd = "mkdir -p $path_new";
+	echo "$cmd\n";
+	system($cmd);
+	$cmd = "mv $path_old/* $path_new/";
+	echo "$cmd\n";
+	system($cmd);
+	if ($path == '')
+		$dest = '.';
+	else
+		$dest = $path;
+	$cmd = "srpl $dest $pid $pid_new";
+	echo "$cmd\n";
+	system($cmd);
+}
+
 ?>
