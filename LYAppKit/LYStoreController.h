@@ -6,6 +6,13 @@
  * EXAMPLE
  *
 \code
+
+	LYAdsController*	controller_ads;
+	LYStoreController*	controller_store;
+
+- (void)init_store_ads;
+- (void)store_payment_done;
+
 - (void)init_store_ads
 {
 	controller_store = [[LYStoreController alloc] initWithString:@"tao.soft.miniapps.torchlight.unlock"];

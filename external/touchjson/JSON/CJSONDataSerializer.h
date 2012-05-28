@@ -42,5 +42,8 @@
 - (NSData *)serializeString:(NSString *)inString error:(NSError **)outError;
 - (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError;
 - (NSData *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError;
+- (NSData *)serializeArray:(NSArray *)inArray;
+- (NSData *)serializeDictionary:(NSDictionary *)inDictionary;
++ (NSData *)serializeDictionary:(NSDictionary *)inDictionary;
 
 @end

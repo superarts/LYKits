@@ -55,7 +55,7 @@ function loop_select($query)
 //	php test.php select 'count(*) from `posts` where `pos-a7` = "Australia"'
 
 $process_user	= false;
-$process_photo	= true;
+$process_photo	= false;
 
 $sdb	= new AmazonSDB();
 $s3		= new AmazonS3();
@@ -71,6 +71,7 @@ if ($argc > 1)
 		echo "aws.php all \ users limit 1\n";
 		echo "aws.php select * from posts where ...\n";
 		echo "aws.php put test name001 key1 value1\n";
+		echo "aws.php put_app org.superarts.app title description image-url type category [app-url]\n";
 		echo "aws.php replace test name001 key1 value0\n";
 		echo "aws.php delete test name001\n";
 		echo "\tEMPTY: repeat last command\n";
@@ -83,6 +84,18 @@ if ($argc > 1)
 		break;
 	case 'put':
 		$sdb->put_attributes($argv[2], $argv[3], array($argv[4] => $argv[5]));
+		die;
+	case 'put_app':
+		$a = array();
+		$a['title']		= $argv[3];
+		$a['desc']		= $argv[4];
+		$a['url-image']	= $argv[5];
+		$a['type']		= $argv[6];
+		$a['category']	= $argv[7];
+		if ($argc > 8)
+			$a['url-app']	= $argv[8];
+		//	print_r($a);
+		$sdb->put_attributes('apps', $argv[2], $a, true);
 		die;
 	case 'replace':
 		$sdb->put_attributes($argv[2], $argv[3], array($argv[4] => $argv[5]), true);
