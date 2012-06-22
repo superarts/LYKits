@@ -12,7 +12,7 @@ if ($argc <= 1)
 	echo "	-n	set package name\n";
 	echo "	-v	set version name\n";
 	echo "	-c	set version code\n";
-	echo "	-a	add permission\n";
+	echo "	-a	add permission, e.g. update (auto update & tracking)\n";
 	echo "COMMANDS\n";
 	echo "	?	print manifest info\n";
 	echo "	nobackup	no backup\n";

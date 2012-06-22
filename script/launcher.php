@@ -16,9 +16,15 @@ if (in_array('?', $arg['arg']))
 }
 
 if (isset($arg['opt']['p']))
+{
+	$filename_project = $arg['opt']['p'] . "/project.properties";
 	$path = "-p {$arg['opt']['p']}";
+}
 else
+{
+	$filename_project = "project.properties";
 	$path = '';
+}
 
 $filename = exec("manifest.php launcher $path");
 echo "filename: $filename\n";
@@ -58,6 +64,22 @@ if ($content_new != $content)
 		file_put_contents($filename_backup, $content);
 	}
 	 */
+}
+
+$content_project = file_get_contents($filename_project);
+$content_project_new = $content_project;
+if (strpos($content_project, 'lib-ly') === false)
+{
+	$content_project_new .= "\nandroid.library.reference.1=../lib-ly";
+}
+
+if ($content_project_new != $content_project)
+{
+	echo "updateing project.properties...\n";
+	if ($test)
+		echo "new project: $content_project_new\n";
+	else
+		file_put_contents($filename_project, $content_project_new);
 }
 
 ?>

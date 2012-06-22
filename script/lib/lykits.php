@@ -38,7 +38,7 @@ function str_range_between($string, $start, $end, $mode = 'normal')
 		//	$string = " " . $string;
 		$ini = strpos($string,$start);
 		//	echo "index: $ini\n";
-		//	if ($ini == 0) return false;
+		if ($ini === false) return false;
 		$ini += strlen($start);
 		$len = strpos($string,$end,$ini) - $ini;
 		//	echo "length: $len\n";
