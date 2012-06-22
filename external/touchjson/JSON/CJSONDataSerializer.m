@@ -191,6 +191,11 @@ NSMutableString *theMutableCopy = [[inString mutableCopy] autorelease];
 return([[NSString stringWithFormat:@"\"%@\"", theMutableCopy] dataUsingEncoding:NSUTF8StringEncoding]);
 }
 
+- (NSData *)serializeArray:(NSArray *)inArray
+{
+	return [self serializeArray:inArray];
+}
+
 - (NSData *)serializeArray:(NSArray *)inArray error:(NSError **)outError
 {
 NSMutableData *theData = [NSMutableData data];
@@ -215,6 +220,16 @@ while ((theValue = [theEnumerator nextObject]) != NULL)
 [theData appendBytes:"]" length:1];
 
 return(theData);
+}
+
++ (NSData *)serializeDictionary:(NSDictionary *)inDictionary
+{
+	return nil;
+}
+
+- (NSData *)serializeDictionary:(NSDictionary *)inDictionary
+{
+	return [self serializeDictionary:inDictionary error:nil];
 }
 
 - (NSData *)serializeDictionary:(NSDictionary *)inDictionary error:(NSError **)outError
