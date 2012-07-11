@@ -15,6 +15,7 @@ if ($argc <= 1)
 	echo "	-a	add permission, e.g. update (auto update & tracking)\n";
 	echo "COMMANDS\n";
 	echo "	?	print manifest info\n";
+	echo "	subversion	use svn commands for file operations like mkdir, mv, etc.\n";
 	echo "	nobackup	no backup\n";
 	echo "	launcher	get launcher filename\n";
 }
@@ -45,6 +46,17 @@ if (in_array('?', $arg['arg']))
 	echo "version code: $version_code\n";
 	echo "version name: $version_name\n";
 	echo "launcher activity: $activity_launcher\n";
+}
+
+if (in_array('subversion', $arg['arg']))
+{
+	$cmd_mkdir = 'svn mkdir --parents';
+	$cmd_mv = 'svn move';
+}
+else
+{
+	$cmd_mkdir = 'mkdir -p';
+	$cmd_mv = 'mv';
 }
 
 if (in_array('launcher', $arg['arg']))
@@ -141,10 +153,10 @@ if (isset($arg['opt']['n']))
 	$pid_new = $arg['opt']['n'];
 	$path_old = $path . "src/" . str_replace('.', '/', $pid);
 	$path_new = $path . "src/" . str_replace('.', '/', $pid_new);
-	$cmd = "mkdir -p $path_new";
+	$cmd = "$cmd_mkdir $path_new";
 	echo "$cmd\n";
 	system($cmd);
-	$cmd = "mv $path_old/* $path_new/";
+	$cmd = "$cmd_mv $path_old/* $path_new/";
 	echo "$cmd\n";
 	system($cmd);
 	if ($path == '')
