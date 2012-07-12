@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/Users/iphone/prj/src/DressUpGirl/src/com/arthisoft/dressupgirl'
+let g:netrw_dirhist_2='/Users/iphone/prj/src/andoku/Andoku/res/values'
+let g:netrw_dirhist_3='/Users/iphone/prj/src/zxing/android/src/com/google/zxing/client/android'
+let g:netrw_dirhist_4='/Users/iphone/bin'
+let g:netrw_dirhist_5='/Users/iphone/prj/eclipse/workspace/lib-lazylist/.git'
+let g:netrw_dirhist_6='/Users/iphone/prj/eclipse/workspace/template-feedgoal/.git'
