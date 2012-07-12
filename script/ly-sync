@@ -1,19 +1,23 @@
 #!/bin/bash
+echo ---- SYNCING LYKITS ----
 cd ~/prj/iphone/LYKits/
 # git status
 git pull
 git commit -a -m "automatic sync"
 git push
+echo ---- SYNCING LIBLY ----
 cd ~/prj/android/lib-ly/
 # git status
 git pull
 git commit -a -m "automatic sync"
 git push
+echo ---- SYNCING LIBSTORE ----
 cd ~/prj/android/lib-store/
 # git status
 git pull
 git commit -a -m "automatic sync"
 git push
+echo ---- SYNCING FEEDGOAL ----
 cd ~/prj/android/template-feedgoal/
 # git status
 git pull
