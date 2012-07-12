@@ -1,0 +1,3 @@
+#!/bin/bash
+# echo "Downloading $1..."
+lftp -c "pget -n 10 $1"

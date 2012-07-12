@@ -1,0 +1,3 @@
+#!/bin/bash
+convert $1 -format 'roundrectangle 1,1 %[fx:w+4],%[fx:h+4] 15,15' -write info:_image_tmp.mvg -matte -bordercolor none -border 3 \( +clone -alpha transparent -background none -fill white -stroke none -strokewidth 0 -draw @_image_tmp.mvg \) -compose DstIn -composite \( +clone -alpha transparent -background none -fill none -stroke black -strokewidth 3 -draw @_image_tmp.mvg -fill none -stroke white -strokewidth 1 -draw @_image_tmp.mvg \) -compose Over -composite ~/icon.png
+rm _image_tmp.mvg

@@ -1,0 +1,2 @@
+#!/bin/bash
+find . -name "*.m" -or -name "*.h" -or -name "*.mm" | grep -v .svn|xargs wc -l

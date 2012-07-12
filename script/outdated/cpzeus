@@ -1,0 +1,2 @@
+#!/bin/bash
+scp -r root@192.168.1.161:/User/Applications/C0325683-D554-4791-AA2D-435BDCFC3C59/Documents/Drawings .

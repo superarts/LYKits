@@ -1,0 +1,2 @@
+#!/bin/bash
+/opt/local/bin/grep -r --exclude-dir=.svn --exclude-dir=~/prj/castfire/rsync/cms.castfire.com/logs $1 *

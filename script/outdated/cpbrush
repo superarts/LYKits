@@ -1,0 +1,2 @@
+#!/bin/bash
+scp root@192.168.1.161:/User/Applications/DDCAABAD-94B3-409E-B9D7-224D5CDA20F5/Documents/paintings/*.png .

@@ -1,0 +1,2 @@
+#!/bin/bash
+afconvert -f caff -d LEI16@44100 -c 1 "$1" -o "$1" $2 $3 $4 $5 $6 $7 $8 $9

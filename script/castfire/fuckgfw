@@ -1,0 +1,2 @@
+#!/bin/bash
+ssh -ND 9998 $dev01

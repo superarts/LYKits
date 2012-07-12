@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#
+# Kills all processes with iPhone in it
+# Written by Paul Peelen [http://PaulPeelen.com]
+# USE AT OWN RISK!
+#
+
+# Make sure only root can run our script
+if [[ $EUID -ne 0 ]]; then
+	echo "This script must be run as root" 1>&2
+	exit 1
+fi
+
+# Get the running processes that have iPhone in it
+result=$(ps -A |grep iPhone |awk {'print$1'} | tr "\n" " ");
+
+# Kill them one by one
+for x in $result
+do
+	kill -9 "$x"
+done

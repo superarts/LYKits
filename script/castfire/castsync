@@ -1,0 +1,2 @@
+#!/bin/bash
+rsync -avze ssh $1 leo@$dev01:/home/leo/castfire

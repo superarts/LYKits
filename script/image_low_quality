@@ -1,0 +1,17 @@
+#!/bin/bash
+find . -name '*gif' -depth -exec convert {} -scale 50% {} \;
+find . -name '*gif' -depth -exec convert {} -scale 200% {} \;
+find . -name '*png' -depth -exec convert {} -scale 50% {} \;
+find . -name '*png' -depth -exec convert {} -scale 200% {} \;
+find . -name '*jpg' -depth -exec convert {} -scale 50% {} \;
+find . -name '*jpg' -depth -exec convert {} -scale 200% {} \;
+find . -name '*jpeg' -depth -exec convert {} -scale 50% {} \;
+find . -name '*jpeg' -depth -exec convert {} -scale 200% {} \;
+find . -name '*GIF' -depth -exec convert {} -scale 50% {} \;
+find . -name '*GIF' -depth -exec convert {} -scale 200% {} \;
+find . -name '*PNG' -depth -exec convert {} -scale 50% {} \;
+find . -name '*PNG' -depth -exec convert {} -scale 200% {} \;
+find . -name '*JPG' -depth -exec convert {} -scale 50% {} \;
+find . -name '*JPG' -depth -exec convert {} -scale 200% {} \;
+find . -name '*JPEG' -depth -exec convert {} -scale 50% {} \;
+find . -name '*JPEG' -depth -exec convert {} -scale 200% {} \;

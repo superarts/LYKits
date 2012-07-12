@@ -1,0 +1,7 @@
+#!/bin/bash
+for img in `ls *.png`
+do
+echo $img
+convert -fill black -draw 'text 11,17 "www.superarts.org"' ${img} ${img}
+convert -fill white -draw 'text 10,16 "www.superarts.org"' ${img} ${img}
+done

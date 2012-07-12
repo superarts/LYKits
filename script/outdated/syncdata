@@ -1,0 +1,2 @@
+#!/bin/bash
+rsync -avz --delete ~/prj/data leo@192.168.1.151::data

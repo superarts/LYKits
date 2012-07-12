@@ -1,0 +1,7 @@
+#!/bin/bash
+wget --spider http://www.google.com.au
+if [ "$?" != 0 ]; then
+echo "Failed!"
+else
+echo "Good!"
+fi

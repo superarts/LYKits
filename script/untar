@@ -1,0 +1,1 @@
+for tar in $2;do tar $1 $tar;done

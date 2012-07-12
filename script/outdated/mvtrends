@@ -1,0 +1,8 @@
+#!/bin/bash
+mv ~/S_D_*.txt ~/Documents/itunes_reports/daily_trends/
+mv ~/S_W_*.txt ~/Documents/itunes_reports/weekly_trends/
+mv ~/S_M_*.txt ~/Documents/itunes_reports/monthly_free/
+mv ~/80063435*.txt ~/Documents/itunes_reports/finance/
+rm ~/S_D_*.gz
+rm ~/S_W_*.gz
+rm ~/S_M_*.gz

@@ -1,0 +1,21 @@
+#!/bin/bash
+cd ~/prj/iphone/LYKits/
+# git status
+git pull
+git commit -a -m "automatic sync"
+git push
+cd ~/prj/android/lib-ly/
+# git status
+git pull
+git commit -a -m "automatic sync"
+git push
+cd ~/prj/android/lib-store/
+# git status
+git pull
+git commit -a -m "automatic sync"
+git push
+cd ~/prj/android/template-feedgoal/
+# git status
+git pull
+git commit -a -m "automatic sync"
+git push
