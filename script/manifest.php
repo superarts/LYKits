@@ -15,7 +15,8 @@ if ($argc <= 1)
 	echo "	-a	add permission, e.g. update (auto update & tracking)\n";
 	echo "COMMANDS\n";
 	echo "	?	print manifest info\n";
-	echo "	subversion	use svn commands for file operations like mkdir, mv, etc.\n";
+	echo "	svn		use svn commands for file operations like mkdir, mv, etc.\n";
+	echo "	git		use git commands for file operations like mkdir, mv, etc.\n";
 	echo "	nobackup	no backup\n";
 	echo "	launcher	get launcher filename\n";
 }
@@ -48,10 +49,15 @@ if (in_array('?', $arg['arg']))
 	echo "launcher activity: $activity_launcher\n";
 }
 
-if (in_array('subversion', $arg['arg']))
+if (in_array('svn', $arg['arg']))
 {
 	$cmd_mkdir = 'svn mkdir --parents';
 	$cmd_mv = 'svn move';
+}
+else if (in_array('git', $arg['arg']))
+{
+	$cmd_mkdir = 'mkdir -p';
+	$cmd_mv = 'git mv';
 }
 else
 {
