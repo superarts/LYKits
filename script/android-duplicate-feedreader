@@ -1,0 +1,9 @@
+#!/bin/bash
+# usage: android-duplicate-feedreader PACKAGE_NAME
+cp -r template-feedgoal $1
+cd $1
+ant clean
+mv ~/icon.png res/drawable/
+manifest.php -n $1 git
+echo TODO vim res/values/strings.xml
+echo TODO ant debug install
