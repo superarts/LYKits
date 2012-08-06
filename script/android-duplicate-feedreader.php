@@ -6,7 +6,7 @@ require('lib/lykits.php');
 
 if ($argc <= 1)
 {
-	echo "USAGE: {$argv[0]} PACKAGE_NAME FILENAME_README FILENAME_ICON\n";
+	echo "USAGE: {$argv[0]} PACKAGE_NAME [FILENAME_README FILENAME_ICON]\n";
 	echo "default icon and readme:\n";
 	echo "	~/icon.png\n";
 	echo "	~/README.txt\n";
@@ -14,6 +14,7 @@ if ($argc <= 1)
 	echo "		TITLE (app name on home screen)\n";
 	echo "		SHORT_DESCRIPTION (title)\n";
 	echo "		LONG_DESCRIPTION (description)\n";
+	die;
 }
 
 $package_name = $argv[1];
