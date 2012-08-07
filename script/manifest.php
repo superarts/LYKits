@@ -14,11 +14,12 @@ if ($argc <= 1)
 	echo "	-c	set version code\n";
 	echo "	-a	add permission, e.g. update (auto update & tracking)\n";
 	echo "COMMANDS\n";
-	echo "	?	print manifest info\n";
-	echo "	svn		use svn commands for file operations like mkdir, mv, etc.\n";
-	echo "	git		use git commands for file operations like mkdir, mv, etc.\n";
+	echo "	?		print manifest info\n";
+	echo "	run/r		try to launch the app\n";
 	echo "	nobackup	no backup\n";
 	echo "	launcher	get launcher filename\n";
+	echo "	svn		use svn commands for file operations like mkdir, mv, etc.\n";
+	echo "	git		use git commands for file operations like mkdir, mv, etc.\n";
 }
 
 if (isset($arg['opt']['p']))
@@ -47,6 +48,13 @@ if (in_array('?', $arg['arg']))
 	echo "version code: $version_code\n";
 	echo "version name: $version_name\n";
 	echo "launcher activity: $activity_launcher\n";
+}
+
+if ((in_array('run', $arg['arg'])) or (in_array('r', $arg['arg'])))
+{
+	$cmd = "adb shell am start -n $pid/$activity_launcher";
+	//echo "$cmd\n";
+	exec($cmd);
 }
 
 if (in_array('svn', $arg['arg']))
