@@ -37,8 +37,8 @@ $app_desc	= substr($readme[3], 0, -1);
 
 function run($cmd)
 {
-	echo "$cmd\n";
-	//system($cmd);
+	//echo "$cmd\n";
+	system($cmd);
 }
 
 //run("android-duplicate-feedreader $package_name");
