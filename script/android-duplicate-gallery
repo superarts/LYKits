@@ -2,6 +2,7 @@
 # android-duplicate-gallery NAME NEW_PACKAGE_NAME SOURCE [install]
 cp -r template-gallery3d $2
 cd $2
+srpl . gallery3d_todo_app_name $1
 rm -rf .git*
 rm assets/*
 # cp ~/babe-example/*.jpg assets/
