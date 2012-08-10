@@ -23,3 +23,9 @@ cd ~/prj/android/template-feedgoal/
 git pull
 git commit -a -m "automatic sync"
 git push
+echo ---- SYNCING GALLERY3D ----
+cd ~/prj/android/template-gallery3d/
+# git status
+git pull
+git commit -a -m "automatic sync"
+git push

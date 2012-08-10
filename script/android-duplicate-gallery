@@ -1,17 +1,17 @@
 #!/bin/bash
-# android-duplicate-gallery NEW_PACKAGE_NAME SOURCE [install]
-cp -r template-gallery3d $1
-cd $1
+# android-duplicate-gallery NAME NEW_PACKAGE_NAME SOURCE [install]
+cp -r template-gallery3d $2
+cd $2
 rm -rf .git*
 rm assets/*
 # cp ~/babe-example/*.jpg assets/
-cp $2/*.jpg assets/
-cp $2/icon.png res/drawable/
+cp $3/*.jpg assets/
+cp $3/icon.png res/drawable/
 cd assets/
 rename.php
 cd ..
-manifest.php -n $1
+manifest.php -n $2
 # vim res/values/strings.xml
 ant clean
-ant debug $3
-cp bin/*-debug.apk ~/$1.apk
+ant debug $4
+cp bin/*-debug.apk ~/$2.apk
