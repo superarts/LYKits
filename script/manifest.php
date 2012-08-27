@@ -18,6 +18,7 @@ if ($argc <= 1)
 	echo "	run/r		try to launch the app\n";
 	echo "	nobackup	no backup\n";
 	echo "	launcher	get launcher filename\n";
+	echo "	pid			get package name\n";
 	echo "	svn		use svn commands for file operations like mkdir, mv, etc.\n";
 	echo "	git		use git commands for file operations like mkdir, mv, etc.\n";
 }
@@ -86,6 +87,11 @@ if (in_array('launcher', $arg['arg']))
 	//	TODO: what if the file is still not there?
 	if (file_exists($s))
 		echo $s;
+}
+
+if (in_array('pid', $arg['arg']))
+{
+	echo $pid;
 }
 
 $content_new = $content;
