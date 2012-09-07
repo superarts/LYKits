@@ -16,6 +16,7 @@ if ($argc <= 1)
 	echo "COMMANDS\n";
 	echo "	?		print manifest info\n";
 	echo "	run/r		try to launch the app\n";
+	echo "	uninst/u	try to uninstall the app\n";
 	echo "	nobackup	no backup\n";
 	echo "	launcher	get launcher filename\n";
 	echo "	pid			get package name\n";
@@ -54,7 +55,14 @@ if (in_array('?', $arg['arg']))
 if ((in_array('run', $arg['arg'])) or (in_array('r', $arg['arg'])))
 {
 	$cmd = "adb shell am start -n $pid/$activity_launcher";
-	//echo "$cmd\n";
+	echo "$cmd\n";
+	exec($cmd);
+}
+
+if ((in_array('uninstall', $arg['arg'])) or (in_array('u', $arg['arg'])))
+{
+	$cmd = "adb uninstall $pid";
+	echo "$cmd\n";
 	exec($cmd);
 }
 
