@@ -53,7 +53,7 @@ if (in_array('?', $arg['arg']))
 if ((in_array('run', $arg['arg'])) or (in_array('r', $arg['arg'])))
 {
 	$cmd = "adb shell am start -n $pid/$activity_launcher";
-	//echo "$cmd\n";
+	echo "$cmd\n";
 	exec($cmd);
 }
 
