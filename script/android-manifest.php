@@ -54,7 +54,7 @@ if (in_array('?', $arg['arg']))
 if ((in_array('run', $arg['arg'])) or (in_array('r', $arg['arg'])))
 {
 	$cmd = "adb shell am start -n $pid/$activity_launcher";
-	echo "$cmd\n";
+	//echo "$cmd\n";
 	exec($cmd);
 }
 
@@ -183,7 +183,8 @@ if (isset($arg['opt']['n']))
 		$dest = '.';
 	else
 		$dest = $path;
-	$cmd = "srpl $dest $pid $pid_new";
+	//$cmd = "srpl $dest $pid $pid_new";
+	$cmd = "rpl -R $pid $pid_new $dest";
 	echo "$cmd\n";
 	system($cmd);
 }
