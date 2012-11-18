@@ -170,7 +170,7 @@ if [ ! -z "$simulation" ]; then
   echo
 else
   cp $tempfile "$file" 
-  /usr/sbin/chown $fchown "$file" 
+  chown $fchown "$file" 
   chmod $fchmod "$file"
   echo "Modified: " $file
 fi
