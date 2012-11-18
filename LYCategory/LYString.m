@@ -433,17 +433,70 @@
 
 - (NSString*)string_between:(NSString*)head and:(NSString*)tail
 {
-	NSRange range_head = [self rangeOfString:head];
-	NSRange range_tail = [self rangeOfString:tail];
-	NSRange range;
+	return [self string_between:head and:tail from:0];
+}
 
+- (NSArray*)array_between:(NSString*)head and:(NSString*)tail
+{
+	NSMutableArray* array = [NSMutableArray array];
+	NSRange range_search;
+	NSRange range;
+	int index = 0;
+	NSString* s = [self string_between:head and:tail from:0];
+	while (s != nil)
+	{
+		[array addObject:s];
+		range_search.location = index;
+		range_search.length = self.length - range_search.location;
+		NSRange range = [self rangeOfString:s options:kNilOptions range:range_search];
+		index = range.location + range.length;
+		s = [self string_between:head and:tail from:index];
+		//NSLog(@"searching %i: %@/%@, %@, %@", index, head, tail, s, self);
+	}
+	return array;
+}
+
+- (NSArray*)array_hashtag
+{
+	NSError *error = nil;
+	NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"#(\\w+)" options:0 error:&error];
+	NSArray *matches = [regex matchesInString:self options:0 range:NSMakeRange(0, self.length)];
+	NSMutableArray* array = [NSMutableArray array];
+	for (NSTextCheckingResult *match in matches) 
+	{
+		NSRange wordRange = [match rangeAtIndex:1];
+		NSString* word = [self substringWithRange:wordRange];
+		[array addObject:word];
+		//	NSLog(@"Found tag %@", word);
+	}
+	return array;
+}
+
+- (NSString*)string_between:(NSString*)head and:(NSString*)tail from:(int)index
+{
+	NSRange range;
+	NSRange range_search;
+
+	if (index > self.length)
+		return nil;
+
+	range_search.location = index;
+	range_search.length = self.length - range_search.location;
+	NSRange range_head = [self rangeOfString:head options:kNilOptions range:range_search];
+	//	NSLog(@"range: %i/%i", range_head.location, range_head.length);
 	if (range_head.location == NSNotFound)
 		return nil;
+
+	range_search.location = range_head.location + range_head.length;
+	range_search.length = self.length - range_search.location;
+	NSRange range_tail = [self rangeOfString:tail options:kNilOptions range:range_search];
+	//	NSLog(@"range: %i/%i", range_tail.location, range_tail.length);
 	if (range_tail.location == NSNotFound)
 		return nil;
 
 	range.location = range_head.location + range_head.length;
 	range.length = range_tail.location - range.location;
+	//	NSLog(@"range: %i/%i", range.location, range.length);
 
 	return [self substringWithRange:range];
 }

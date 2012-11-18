@@ -702,7 +702,14 @@
 		cell.backgroundColor = cell_bg_color;
 
 	if (text_label.hidden == NO)
+	{
 		[cell.textLabel copy_style:text_label];
+		/*
+		cell.textLabel.frame = text_label.frame;
+		cell.textLabel.baselineAdjustment = UIBaselineAdjustmentNone;
+		[cell.textLabel sizeToFit];
+		*/
+	}
 	else
 		cell.textLabel.backgroundColor = [UIColor clearColor];
 

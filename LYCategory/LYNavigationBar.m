@@ -14,7 +14,7 @@
 #ifdef LY_ENABLE_CATEGORY_NAVIGATIONBAR_BACKGROUND
 - (void)drawRect:(CGRect)rect
 {
-	//	NSLog(@"nav draw rect %@", bg);
+		NSLog(@"nav draw rect %@", [self associated:@"ly_bg"]);
 	if ([self associated:@"ly_bg"] != nil)
 	   [[[self associated:@"ly_bg"] image] drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
 	else
@@ -24,7 +24,7 @@
 
 - (void)set_background_image:(UIImage*)image
 {
-	//NSLog(@"uivigationbar set background image: %@", image);
+	NSLog(@"uivigationbar set background image: %@", image);
 	if (image == nil) return;
 	[self associate:@"ly_bg" with:[[UIImageView alloc] initWithImage:image]];
 	[[self associated:@"ly_bg"] setFrame:CGRectMake(0.f, 0.f, self.frame.size.width, self.frame.size.height)];

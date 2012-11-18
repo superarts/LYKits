@@ -74,7 +74,7 @@
 - (void)sort_by_key:(NSString*)key int_ascending:(BOOL)b
 {
 	NSSortDescriptor*   descriptor;
-	descriptor = [NSSortDescriptor sortDescriptorWithKey:key ascending:b comparator:^(id s1, id s2)
+	descriptor = [NSSortDescriptor sortDescriptorWithKey:key ascending:b comparator:^NSComparisonResult(id s1, id s2)
 	{
 		int i1 = [s1 intValue];
 		int i2 = [s2 intValue];
