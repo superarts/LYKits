@@ -57,14 +57,69 @@
 }
 @end
 
-@interface UITextField(UITextFieldCatagory)
+
+@interface UITextField(UITextFieldCategory)
 - (void)set_margin_left:(CGFloat)f;
 - (void)set_margin_right:(CGFloat)f;
 - (CGRect)textRectForBounds:(CGRect)bounds;
 - (CGRect)editingRectForBounds:(CGRect)bounds;
 @end
 
-@implementation UITextField(UITextFieldCatagory)
+@implementation UITextField(UITextFieldCategory)
+- (void)set_margin_left:(CGFloat)f
+{
+	[self associate:@"ly-margin-left" with:[NSNumber numberWithFloat:f]];
+}
+- (void)set_margin_right:(CGFloat)f
+{
+	[self associate:@"ly-margin-right" with:[NSNumber numberWithFloat:f]];
+}
+- (CGRect)textRectForBounds:(CGRect)bounds {
+	if ([self isMemberOfClass:[UITextField class]] == NO)
+	{
+		return CGRectMake(bounds.origin.x + 24, bounds.origin.y, 
+				bounds.size.width - 48, bounds.size.height);
+	}
+	NSNumber* number_left	= [self associated:@"ly-margin-left"];
+	NSNumber* number_right	= [self associated:@"ly-margin-right"];
+	CGFloat left = 0;
+	CGFloat right = 0;
+	if (number_left != nil)
+		left = [number_left floatValue];
+	if (number_right != nil)
+		right = [number_right floatValue];
+    CGRect inset = CGRectMake(bounds.origin.x + left, bounds.origin.y, bounds.size.width - left - right, bounds.size.height);
+    return inset;
+}
+- (CGRect)editingRectForBounds:(CGRect)bounds {
+	if ([self isMemberOfClass:[UITextField class]] == NO)
+	{
+		return CGRectMake(bounds.origin.x + 24, bounds.origin.y, 
+				bounds.size.width - 48, bounds.size.height);
+	}
+	NSNumber* number_left	= [self associated:@"ly-margin-left"];
+	NSNumber* number_right	= [self associated:@"ly-margin-right"];
+	CGFloat left = 0;
+	CGFloat right = 0;
+	if (number_left != nil)
+		left = [number_left floatValue];
+	if (number_right != nil)
+		right = [number_right floatValue];
+    CGRect inset = CGRectMake(bounds.origin.x + left, bounds.origin.y, bounds.size.width - left - right, bounds.size.height);
+    return inset;
+}
+@end
+
+
+#if 0
+@interface UISearchBar(UISearchBarCategory)
+- (void)set_margin_left:(CGFloat)f;
+- (void)set_margin_right:(CGFloat)f;
+- (CGRect)textRectForBounds:(CGRect)bounds;
+- (CGRect)editingRectForBounds:(CGRect)bounds;
+@end
+
+@implementation UISearchBar(UISearchBarCategory)
 - (void)set_margin_left:(CGFloat)f
 {
 	[self associate:@"ly-margin-left" with:[NSNumber numberWithFloat:f]];
@@ -98,6 +153,7 @@
     return inset;
 }
 @end
+#endif
 
 #if 0
 @interface NSData (LYData)

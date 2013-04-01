@@ -4,6 +4,9 @@
 
 - (void)push:(UIViewController*)controller transition:(UIViewAnimationTransition)transition;
 - (void)pop_transition:(UIViewAnimationTransition)transition;
+- (void)present:(UIViewController*)controller transition:(CATransition*)transition;
+- (void)present_left:(UIViewController*)controller;
+- (void)present_right:(UIViewController*)controller;
 
 #ifdef LY_ENABLE_CATEGORY_NAVIGATIONCONTROLLER_LANDSCAPE
 #endif

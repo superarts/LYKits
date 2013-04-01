@@ -456,6 +456,16 @@
 	return array;
 }
 
+- (BOOL)is_hashtag
+{
+	NSArray* array = [self array_hashtag];
+	//	NSLog(@"%@ is hashtag: %@", self, array);
+	if (array.count == 1)
+		if ([self is:[NSString stringWithFormat:@"#%@", [array i:0]]])
+			return YES;
+	return NO;
+}
+
 - (NSArray*)array_hashtag
 {
 	NSError *error = nil;

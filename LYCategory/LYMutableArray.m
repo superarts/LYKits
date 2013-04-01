@@ -54,6 +54,20 @@
 	return NO;
 }
 
+- (BOOL)toggle_object:(id)obj
+{
+	if ([self containsObject:obj])
+	{
+		[self removeObject:obj];
+		return NO;
+	}
+	else
+	{
+		[self addObject:obj];
+		return YES;
+	}
+}
+
 - (BOOL)insert_unique:(id)obj at:(int)index
 {
 	if ([self containsObject:obj] == NO)

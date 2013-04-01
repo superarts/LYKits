@@ -144,6 +144,7 @@
 		[data setValue:[NSMutableArray array] forKey:@"filter-array"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-subviews"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-gestures"];
+		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-heights"];
 		[data setValue:@"Loading..." forKey:@"refresh-text"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"refresh-disable-bg"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"cell-disable-blank"];	//	disable blank sections
@@ -154,6 +155,12 @@
 		[data setValue:nil forKey:@"backup-accessories-highlighted"];
 		[data setValue:nil forKey:@"backup-badge-array"];
 		[data setValue:nil forKey:@"backup-badge2-array"];
+		[data setValue:nil forKey:@"cell-cap-top"];
+		[data setValue:nil forKey:@"cell-cap-middle"];
+		[data setValue:nil forKey:@"cell-cap-bottom"];
+		[data setValue:nil forKey:@"cell-swipe-view"];
+		[data setValue:nil forKey:@"cell-swipe-action"];
+		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-swipe-enable"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"source-delete-delegate"];
 		//	[data setValue:nil forKey:@"source-deleted-row"];
 
@@ -175,8 +182,8 @@
 		[data setValue:image_badge forKey:@"badge-image"];
 		[data setValue:label_badge2 forKey:@"badge2-label"];
 		[data setValue:image_badge2 forKey:@"badge2-image"];
-		[data setValue:progress_refresh forKey:@"refresh-progress"];
-		[data setValue:progress_refresh forKey:@"refresh-view"];
+		//[data setValue:progress_refresh forKey:@"refresh-progress"];
+		//[data setValue:progress_refresh forKey:@"refresh-view"];
 
 		//	release preset ui
 		[label_badge release];
@@ -251,8 +258,32 @@
 		}
 
 		//	[self setTheme:@"white on black"];
+	
+		activity_more = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		activity_more.hidesWhenStopped = YES;
+		//activity_more.startAnimating;
+		//[activity set_y:-10];
+		//[activity reset_height:20];
+		view.tableFooterView = activity_more;
 	}
 	return self;
+}
+
+- (void)enable_ego_refresh
+{
+#ifdef LY_ENABLE_EGOREFRESH
+		if (ego_header == nil) 
+		{
+			EGORefreshTableHeaderView* view_ego = [[EGORefreshTableHeaderView alloc] initWithFrame:
+				CGRectMake(0.0f, 0.0f - view.bounds.size.height, view.frame.size.width, view.bounds.size.height)];
+			view_ego.delegate = self;
+			[view addSubview:view_ego];
+			ego_header = view_ego;
+			[view_ego release];
+		}
+		//  update the last update date
+		[ego_header refreshLastUpdatedDate];
+#endif
 }
 
 - (void)setTheme:(NSString*)a_theme
@@ -406,19 +437,22 @@
 		return [[texts objectAtIndex:section] count];
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)path
 {
 	NSArray* array;
-	UIView* additional_view = [self get_additional_view:indexPath];
+	UIView* additional_view = [self get_additional_view:path];
+	NSNumber* number = [[data v:@"cell-heights"] objectForKey:path];
 
 	if (additional_view != nil)
 	{
-		array = [texts objectAtIndex:indexPath.section];
-		if ((array.count != 1) && ((array.count - 1) == indexPath.row))
+		array = [texts objectAtIndex:path.section];
+		if ((array.count != 1) && ((array.count - 1) == path.row))
 			return additional_view.frame.size.height + 2;
 		else
 			return additional_view.frame.size.height + 1;
 	}
+	else if (number != nil)
+		return [number floatValue];
 	return cell_height;
 }
 
@@ -485,6 +519,7 @@
 		accessory	= [accessories object_at_path:indexPath];
 		subviews	= [[data v:@"cell-subviews"] objectForKey:indexPath];
 		gestures	= [[data v:@"cell-gestures"] objectForKey:indexPath];
+		NSNumber* swipe_enable = [[data v:@"cell-swipe-enable"] objectForKey:indexPath];
 
 		the_image = [UIImage imageNamed:image];
 		if (the_image == nil)
@@ -535,7 +570,7 @@
 					[cell addSubview:image_view];
 				else
 					NSLog(@"TABLE warning: unknown cell image place");
-				//NSLog(@"table image url: %@\n%@", image_url, image_view);
+				//	NSLog(@"table image url: %@\n%@", image_url, image_view);
 			}
 #if 1
 			if (([[data v:@"badge-image"] isHidden] == NO) &&
@@ -590,7 +625,7 @@
 			{
 				if ([accessory is:@"default"])
 					cell.accessoryType = accessory_type;
-				if ([accessory is:@"checkmark"])
+				else if ([accessory is:@"checkmark"])
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;
 				else if ([accessory is:@"none"])
 					cell.accessoryType = UITableViewCellAccessoryNone;
@@ -624,6 +659,16 @@
 			if (gestures != nil)
 				for (UIGestureRecognizer* gesture in gestures)
 					[cell addGestureRecognizer:gesture];
+
+			if (([data v:@"cell-swipe-view"] != nil) && (![swipe_enable isEqual:[NSNumber numberWithBool:false]]))
+			{
+				UISwipeGestureRecognizer* gesture_swipe_left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view:)];
+				UISwipeGestureRecognizer* gesture_swipe_right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view:)];
+				gesture_swipe_left.direction = UISwipeGestureRecognizerDirectionLeft;
+				gesture_swipe_right.direction = UISwipeGestureRecognizerDirectionRight;
+				[cell addGestureRecognizer:gesture_swipe_left];
+				[cell addGestureRecognizer:gesture_swipe_right];
+			}
 		}
 
 		if (!([[data v:@"state"] is:@"refresh"] && ([[data v:@"refresh-disable-bg"] boolValue] == YES)))
@@ -635,17 +680,44 @@
 			}
 			else if ((indexPath.row == 0) && (cell_bg_top != nil))
 			{
-				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_top];
+				UIImage* image = [UIImage imageNamed:cell_bg_top];
+				NSString* s = [data v:@"cell-cap-top"];
+				UIEdgeInsets edge;
+				if (s != nil)
+				{
+					edge = UIEdgeInsetsFromString(s);
+					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
+				}
+				cell.backgroundView = [[UIImageView alloc] initWithImage:image];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_top];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_top_selected];
 			}
 			else if ((indexPath.row == ([[texts object_at_index:indexPath.section] count] - 1)) && (cell_bg_bottom != nil))
 			{
-				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_bottom];
+				UIImage* image = [UIImage imageNamed:cell_bg_bottom];
+				NSString* s = [data v:@"cell-cap-bottom"];
+				UIEdgeInsets edge;
+				if (s != nil)
+				{
+					edge = UIEdgeInsetsFromString(s);
+					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
+				}
+				cell.backgroundView = [[UIImageView alloc] initWithImage:image];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_bottom];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_bottom_selected];
 			}
 			else if (cell_bg_middle != nil)
 			{
-				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_middle];
+				UIImage* image = [UIImage imageNamed:cell_bg_middle];
+				NSString* s = [data v:@"cell-cap-middle"];
+				UIEdgeInsets edge;
+				if (s != nil)
+				{
+					edge = UIEdgeInsetsFromString(s);
+					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
+				}
+				cell.backgroundView = [[UIImageView alloc] initWithImage:image];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_middle];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_middle_selected];
 			}
 			else if (cell_bg != nil)
@@ -674,6 +746,48 @@
 	}
 
 	return cell;
+}
+
+- (void)toggle_swipe_view:(UISwipeGestureRecognizer*)gesture
+{
+	UIView* the_view;
+	the_view = [data v:@"cell-swipe-view"];
+#if 0
+	the_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
+	the_view.backgroundColor = [UIColor blueColor];
+#endif
+	//the_view.frame = CGRectMake(20, 0, 300, gesture.view.frame.size.height - 10);
+	[the_view set_x:(320 - the_view.frame.size.width) / 2];
+	[the_view set_y:0];
+	//[the_view set_h:gesture.view.frame.size.height];
+	if (the_view.superview == nil)
+		the_view.alpha = 0;
+	if (the_view.alpha == 0)
+	{
+		//the_view.backgroundColor = [UIColor whiteColor];
+		[gesture.view addSubview:the_view];
+		//[gesture.view bringSubviewToFront:the_view];
+		//the_view.alpha = 0;
+		[UIView begin_animations:0.3];
+		the_view.alpha = 1;
+		[UIView commitAnimations];
+		NSString* s =  [data v:@"cell-swipe-action"];
+		//NSLog(@"swipe view: %@\naction: %@", the_view, s);
+		if (s != nil)
+			[delegate perform_string:s with:gesture.view with:self];
+	}
+	else if (the_view.alpha == 1)
+	{
+		[UIView begin_animations:0.3];
+		the_view.alpha = 0;
+		[UIView commitAnimations];
+		[self performSelector:@selector(toggle_swipe_view_end) withObject:nil afterDelay:0.3];
+	}
+}
+
+- (void)toggle_swipe_view_end
+{
+	[[data v:@"cell-swipe-view"] removeFromSuperview];
 }
 
 #if 1
@@ -1007,6 +1121,9 @@
 
 - (void)dealloc
 {
+#ifdef LY_ENABLE_EGOREFRESH
+	ego_header = nil;
+#endif
 	if (search_bar != nil)
 		[search_bar release];
 	if (backup_dict != nil)
@@ -1025,6 +1142,7 @@
 
 	[text_label release];
 	[detail_label release];
+	[activity_more release];
 
 	[super dealloc];
 }
@@ -1092,9 +1210,10 @@
 {
 	NSDictionary*	dict;
 
+	//	NSLog(@"TABLE checking additional view: %@", additional_views);
 	for (dict in additional_views)
 	{
-		//	NSLog(@"TABLE checking additional view: %@", additional_views);
+		//	NSLog(@"xxx %@", dict);
 		if (([[dict objectForKey:@"section"] integerValue] == path.section) &&
 			([[dict objectForKey:@"row"] integerValue] == path.row))
 		{
@@ -1113,6 +1232,28 @@
 {
 	//	NSLog(@"scrolled to: %@", NSStringFromCGPoint(scrollView.contentOffset));
 	[delegate perform_string:@"scrollViewDidScroll:" with:scrollView];
+#ifdef LY_ENABLE_EGOREFRESH
+	[ego_header egoRefreshScrollViewDidScroll:scrollView];
+#else
+	if ([scrollView contentOffset].y == scrollView.frame.origin.y)
+	{
+		//	NSLog(@"top");
+		[delegate perform_string:@"table_reload:" with:self];
+	}
+	else 
+#endif
+	if (([scrollView contentOffset].y + scrollView.frame.size.height) == [scrollView contentSize].height) 
+	{
+		//	NSLog(@"bottom");
+		[delegate perform_string:@"table_load_more:" with:self];
+		activity_more.startAnimating;
+		[view reloadData];
+	}
+}
+
+- (void)table_load_more_done
+{
+	activity_more.stopAnimating;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
@@ -1131,6 +1272,10 @@
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+#ifdef LY_ENABLE_EGOREFRESH
+	[ego_header egoRefreshScrollViewDidEndDragging:scrollView];
+#endif
+
 	if ((search_bar != nil) && (view.contentOffset.y < 0))
 	{
 		//	NSLog(@"drag from %f", scroll_drag_begin);
@@ -1566,5 +1711,53 @@
 	//[view reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
 	[view endUpdates];
 }
+
+- (void)setTable:(UITableView*)a_table
+{
+	NSLog(@"WARNING: setting table is not supported currently; please check the 'view' property.");
+}
+
+- (UITableView*)table
+{
+	return view;
+}
+
+#if 0
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell*)cell
+{
+}
+#endif
+
+#pragma mark ego refresh
+
+#ifdef LY_ENABLE_EGOREFRESH
+- (void)reloadTableViewDataSource
+{
+	[delegate perform_string:@"table_reload:" with:self];
+	ego_loading = YES;
+}
+
+- (void)table_reload_done
+{
+	ego_loading = NO;
+	[ego_header egoRefreshScrollViewDataSourceDidFinishedLoading:view];
+}
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view
+{
+	[self reloadTableViewDataSource];
+	//[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:0.0];
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view
+{
+	return ego_loading; // should return if data source model is reloading
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view
+{
+	return [NSDate date]; // should return date data source was last changed
+}
+#endif
 
 @end

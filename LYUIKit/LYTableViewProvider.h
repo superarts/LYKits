@@ -2,6 +2,10 @@
 #import <UIKit/UIKit.h>
 #import "LYPublic.h"
 
+#ifdef LY_ENABLE_EGOREFRESH
+#	import "EGORefreshTableHeaderView.h"
+#endif
+
 ///	advanced provider model for table views
 /**	
  * EXAMPLE
@@ -19,8 +23,17 @@
 \endcode
  */
 
-@interface LYTableViewProvider: NSObject <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
+@interface LYTableViewProvider: NSObject <UITableViewDelegate, UITableViewDataSource, 
+#ifdef LY_ENABLE_EGOREFRESH
+	EGORefreshTableHeaderDelegate,
+#endif
+	UISearchBarDelegate>
 {
+#ifdef LY_ENABLE_EGOREFRESH
+	EGORefreshTableHeaderView*		ego_header;
+	BOOL							ego_loading;
+#endif
+
 	UITableView*					view;
 	UISearchBar*					search_bar;
 	UIButton*						button_mask;
@@ -88,8 +101,10 @@
 	NSMutableArray*			backup_footers;
 	NSMutableDictionary*	backup_dict;
 
-	CGFloat				scroll_drag_begin;
+	CGFloat						scroll_drag_begin;
+	UIActivityIndicatorView*	 activity_more;
 }
+@property (nonatomic, retain) UITableView*					table;
 @property (nonatomic, retain) IBOutlet UITableView*			view;
 @property (nonatomic, retain) IBOutlet UIViewController*	controller;
 @property (nonatomic, retain) id							delegate;
@@ -166,11 +181,16 @@
 - (void)filter_apply_animated:(BOOL)animated;
 - (void)filter_remove;
 - (void)enable_search;
+- (void)enable_ego_refresh;
 
 - (void)refresh_begin;
 - (void)refresh_end;
 - (void)refresh_animated;
 - (void)action_search_resign;
+
+//	callbacks
+- (void)table_reload_done;
+- (void)table_load_more_done;
 
 @end
 

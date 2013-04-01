@@ -19,6 +19,25 @@
 	[UIView setAnimationTransition:transition forView:self.view cache:NO];
 	[UIView commitAnimations];
 }
+- (void)present:(UIViewController*)controller transition:(NSString*)a_transition
+{
+	[self dismissModalViewControllerAnimated:NO];
+	CATransition* transition = [CATransition animation];
+	transition.duration = 0.3;
+	transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	transition.type = kCATransitionPush;
+	transition.subtype = a_transition;
+	[self.view.window.layer addAnimation:transition forKey:nil];
+	[self presentModalViewController:controller animated:NO];
+}
+- (void)present_left:(UIViewController*)controller
+{
+	[self present:controller transition:kCATransitionFromLeft];
+}
+- (void)present_right:(UIViewController*)controller
+{
+	[self present:controller transition:kCATransitionFromRight];
+}
 #ifdef LY_ENABLE_CATEGORY_NAVIGATIONCONTROLLER_LANDSCAPE
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {

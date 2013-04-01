@@ -159,7 +159,7 @@ static LYKits*	ly_shared_manager = nil;
 	}
 }
 
-+ (CGFloat)screen_height;
++ (CGFloat)screen_height
 {
 	@synchronized(self)
 	{

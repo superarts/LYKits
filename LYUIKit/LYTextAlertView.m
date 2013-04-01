@@ -49,6 +49,7 @@
 			if (i == 0)
 				[field becomeFirstResponder];
 		}
+		delegate = nil;
 		//	[self show];
 	}
 	return self;
@@ -99,6 +100,7 @@
 
 #pragma mark delegate
 
+#if 1
 - (void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
 	//	NSLog(@"got index: %i", buttonIndex);
@@ -129,5 +131,6 @@
 	}
 	return YES;
 }
+#endif 
 
 @end

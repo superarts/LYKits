@@ -47,6 +47,7 @@ void ly_upload_file(NSString* filename, NSString* arg_id, NSString* desc);
 //
 //	#define LY_ENABLE_OBJECTAL
 //	#define LY_ENABLE_OPENAL
+//	#define LY_ENABLE_EGOREFRESH
 
 //	Optional modules:	supersound, map, music
 //	SDK needed modules:	ads, store, gamecenter

@@ -75,6 +75,7 @@
 - (NSString*)string_between:(NSString*)head and:(NSString*)tail;
 - (NSString*)string_between:(NSString*)head and:(NSString*)tail from:(int)index;
 - (NSArray*)array_between:(NSString*)head and:(NSString*)tail;
+- (BOOL)is_hashtag;
 - (NSArray*)array_hashtag;
 + (NSString*)string_from_int:(int)i;
 - (NSString*)s_int:(int)i;				//	[@"photo" s_int:3] == @"3 photos"
