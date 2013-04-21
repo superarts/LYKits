@@ -2,6 +2,8 @@
 
 @implementation LYAsyncImageView
 
+@synthesize delegate;
+
 - (id)init
 {
 	self = [super init];
@@ -14,6 +16,7 @@
 		is_downloading = NO;
 		data = nil;
 		connection = nil;
+		delegate = nil;
 	}
 
 	return [super init];
@@ -39,6 +42,7 @@
 		//	NSLog(@"loading from cache: %@", [filename filename_document]);
 		self.image = [UIImage imageWithContentsOfFile:[filename filename_document]];
 		[filename release];
+		[delegate perform_string:@"async_image_loaded:" with:self];
 	}
 	else
 	{
@@ -55,6 +59,7 @@
 			[UIView commitAnimations];
 			[filename_original release], filename_original = nil;
 			[filename release], filename = nil;
+			[delegate perform_string:@"async_image_loaded:" with:self];
 		}
 		else
 		{
@@ -101,6 +106,11 @@
 		[ly no_backup:[filename filename_document]];
 		self.image = the_image;
 		[UIView commitAnimations];
+
+		if (delegate != nil)
+		{
+			[delegate perform_string:@"async_image_downloaded:" with:self];
+		}
 	}
 	[filename_original release], filename_original = nil;
 	[filename release], filename = nil;

@@ -17,7 +17,19 @@
 	[self get_image_nav:nav image:view delegate:nil];
 }
 
-- (void)get_image_nav:(UINavigationController*)nav image:(UIImageView*)view delegate:(id)obj
+- (void)get_image_nav:(UINavigationController*)nav image:(UIImageView*)image delegate:(id)obj
+{
+	[self associate:@"ly-image" with:image];
+	[self get_image_nav:nav delegate:obj];
+}
+
+- (void)get_image_nav:(UINavigationController*)nav button:(UIButton*)button delegate:(id)obj
+{
+	[self associate:@"ly-button" with:button];
+	[self get_image_nav:nav delegate:obj];
+}
+
+- (void)get_image_nav:(UINavigationController*)nav delegate:(id)obj
 {
 	[self associate:@"ly_delegate" with:obj];
 
@@ -49,8 +61,6 @@
 			[[self associated:@"ly_pop"] presentPopoverFromRect:parent.frame inView:nav.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
 		}
 	}
-
-	[self associate:@"ly-image" with:view];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)a_picker didFinishPickingMediaWithInfo:(NSDictionary *)info
@@ -68,7 +78,14 @@
 	image = [UIImage imageWithCGImage:image.CGImage scale:ratio orientation:image.imageOrientation];
 	NSLog(@"image size 2: %@", NSStringFromCGSize(image.size));
 	//	NSLog(@"orientation: %i", image.imageOrientation);
-	[[self associated:@"ly-image"] setImage:image];
+	
+	UIImageView* image_view = [self associated:@"ly-image"];
+	if (image_view != nil)
+		[image_view setImage:image];
+	UIButton* button = [self associated:@"ly-button"];
+	if (button != nil)
+		[button setImage:image forState:UIControlStateNormal];
+
 	[LYLoading hide];
 	[self ly_dismiss];
 

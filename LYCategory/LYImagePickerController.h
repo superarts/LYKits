@@ -13,6 +13,8 @@ id							ly_delegate;
 - (void)set_delegate:(id)a_delegate;
 - (void)get_image_nav:(UINavigationController*)nav image:(UIImageView*)view;
 - (void)get_image_nav:(UINavigationController*)nav image:(UIImageView*)view delegate:(id)obj;
+- (void)get_image_nav:(UINavigationController*)nav button:(UIButton*)button delegate:(id)obj;
+- (void)get_image_nav:(UINavigationController*)nav delegate:(id)obj;
 - (void)ly_dismiss;
 
 @end

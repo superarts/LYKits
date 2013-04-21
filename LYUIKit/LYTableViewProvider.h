@@ -181,7 +181,7 @@
 - (void)filter_apply_animated:(BOOL)animated;
 - (void)filter_remove;
 - (void)enable_search;
-- (void)enable_ego_refresh;
+- (void)enable_ego_refresh:(NSString*)action;
 
 - (void)refresh_begin;
 - (void)refresh_end;

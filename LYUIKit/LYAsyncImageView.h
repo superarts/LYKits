@@ -10,7 +10,9 @@
 	NSString*			filename_original;
 	NSString*			filename;
 	BOOL				is_downloading;
+	id					delegate;
 }
+@property (retain, nonatomic) id	delegate;
 
 - (void)load_url:(NSString *)theUrlString;
 

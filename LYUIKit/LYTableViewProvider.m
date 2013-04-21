@@ -160,6 +160,8 @@
 		[data setValue:nil forKey:@"cell-cap-bottom"];
 		[data setValue:nil forKey:@"cell-swipe-view"];
 		[data setValue:nil forKey:@"cell-swipe-action"];
+		[data setValue:nil forKey:@"action-load-more"];
+		[data setValue:nil forKey:@"action-ego-refresh"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-swipe-enable"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"source-delete-delegate"];
 		//	[data setValue:nil forKey:@"source-deleted-row"];
@@ -269,20 +271,21 @@
 	return self;
 }
 
-- (void)enable_ego_refresh
+- (void)enable_ego_refresh:(NSString*)action
 {
 #ifdef LY_ENABLE_EGOREFRESH
-		if (ego_header == nil) 
-		{
-			EGORefreshTableHeaderView* view_ego = [[EGORefreshTableHeaderView alloc] initWithFrame:
-				CGRectMake(0.0f, 0.0f - view.bounds.size.height, view.frame.size.width, view.bounds.size.height)];
-			view_ego.delegate = self;
-			[view addSubview:view_ego];
-			ego_header = view_ego;
-			[view_ego release];
-		}
-		//  update the last update date
-		[ego_header refreshLastUpdatedDate];
+	[data key:@"action-ego-refresh" v:action];
+	if (ego_header == nil) 
+	{
+		EGORefreshTableHeaderView* view_ego = [[EGORefreshTableHeaderView alloc] initWithFrame:
+			CGRectMake(0.0f, 0.0f - view.bounds.size.height, view.frame.size.width, view.bounds.size.height)];
+		view_ego.delegate = self;
+		[view addSubview:view_ego];
+		ego_header = view_ego;
+		[view_ego release];
+	}
+	//  update the last update date
+	[ego_header refreshLastUpdatedDate];
 #endif
 }
 
@@ -759,6 +762,7 @@
 	//the_view.frame = CGRectMake(20, 0, 300, gesture.view.frame.size.height - 10);
 	[the_view set_x:(320 - the_view.frame.size.width) / 2];
 	[the_view set_y:0];
+	[the_view set_h:gesture.view.frame.size.height - 6];
 	//[the_view set_h:gesture.view.frame.size.height];
 	if (the_view.superview == nil)
 		the_view.alpha = 0;
@@ -1245,9 +1249,13 @@
 	if (([scrollView contentOffset].y + scrollView.frame.size.height) == [scrollView contentSize].height) 
 	{
 		//	NSLog(@"bottom");
-		[delegate perform_string:@"table_load_more:" with:self];
-		activity_more.startAnimating;
-		[view reloadData];
+		NSString* action = [data v:@"action-load-more"];
+		if (action != nil)
+		{
+			[delegate perform_string:action with:self];
+			activity_more.startAnimating;
+			[view reloadData];
+		}
 	}
 }
 
@@ -1733,8 +1741,12 @@
 #ifdef LY_ENABLE_EGOREFRESH
 - (void)reloadTableViewDataSource
 {
-	[delegate perform_string:@"table_reload:" with:self];
-	ego_loading = YES;
+	NSString* action = [data v:@"action-ego-refresh"];
+	if (action != nil)
+	{
+		[delegate perform_string:action with:self];
+		ego_loading = YES;
+	}
 }
 
 - (void)table_reload_done
