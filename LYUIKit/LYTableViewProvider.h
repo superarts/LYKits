@@ -103,6 +103,10 @@
 
 	CGFloat						scroll_drag_begin;
 	UIActivityIndicatorView*	 activity_more;
+	BOOL	is_swiped;
+	UIView*	view_swiped;
+	UIView* hack_view_mask;
+	UISwipeGestureRecognizer* current_swipe_gesture;
 }
 @property (nonatomic, retain) UITableView*					table;
 @property (nonatomic, retain) IBOutlet UITableView*			view;
@@ -191,6 +195,8 @@
 //	callbacks
 - (void)table_reload_done;
 - (void)table_load_more_done;
+
+- (void)toggle_swipe_view_hack;
 
 @end
 

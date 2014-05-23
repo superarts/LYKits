@@ -28,8 +28,8 @@
 	if (image == nil) return;
 	[self associate:@"ly_bg" with:[[UIImageView alloc] initWithImage:image]];
 	[[self associated:@"ly_bg"] setFrame:CGRectMake(0.f, 0.f, self.frame.size.width, self.frame.size.height)];
-	//[self addSubview:bg];
-	//[self sendSubviewToBack:bg];
+	//[self addSubview:[self associated:@"ly_bg"]];
+	//[self sendSubviewToBack:[self associated:@"ly_bg"]];
 	//[bg release];
 }
 

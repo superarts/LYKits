@@ -68,25 +68,34 @@
 	UIImage* image = [info valueForKey:@"UIImagePickerControllerEditedImage"];
 	if (image == nil)
 		image = [info valueForKey:@"UIImagePickerControllerOriginalImage"];
-	[LYLoading show];
+	//[LYLoading show];
 	image = [image apply_orientation];
-	NSLog(@"image size 1: %@", NSStringFromCGSize(image.size));
-	//image = [image image_with_size_aspect_fill:CGSizeMake([ly screen_width], [ly screen_height])];
+	
 	CGFloat ratio = image.size.width / [ly screen_width] / [[UIScreen mainScreen] scale];
 	if (ratio < 1)
 		ratio = 1;
 	image = [UIImage imageWithCGImage:image.CGImage scale:ratio orientation:image.imageOrientation];
-	NSLog(@"image size 2: %@", NSStringFromCGSize(image.size));
-	//	NSLog(@"orientation: %i", image.imageOrientation);
-	
+
 	UIImageView* image_view = [self associated:@"ly-image"];
 	if (image_view != nil)
+	{
+		//NSLog(@"image size 1: %@", NSStringFromCGSize(image.size));
+		//image = [image image_with_size_aspect_fill:CGSizeMake([ly screen_width], [ly screen_height])];
+		//NSLog(@"image size 2: %@", NSStringFromCGSize(image.size));
+		//	NSLog(@"orientation: %i", image.imageOrientation);
 		[image_view setImage:image];
+	}
 	UIButton* button = [self associated:@"ly-button"];
 	if (button != nil)
+	{
+		button.clipsToBounds = YES;
+		//	TODO: add parameter
+		//UIImage* image_small = [image image_with_size:CGSizeMake(20, 20)];
+		//UIImage* image = [image image_with_size:CGSizeMake(20, 20)];
 		[button setImage:image forState:UIControlStateNormal];
+	}
 
-	[LYLoading hide];
+	//[LYLoading hide];
 	[self ly_dismiss];
 
 	if ([self associated:@"ly_delegate"] != nil)

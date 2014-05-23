@@ -9,6 +9,11 @@
 @synthesize setter;
 @synthesize getter;
 @synthesize button_ime;
+@synthesize current_keyboard_layout;
+@synthesize current_keyboard_status;
+@synthesize controller_left;
+@synthesize controller_right;
+@synthesize data;
 
 - (id)initWithDelegate:(id)obj
 {
@@ -41,7 +46,7 @@
 				button_ime.frame = CGRectMake(10, 10, 40, 40);
 			else
 				button_ime.frame = CGRectMake(10, 10, 50, 50);
-			[self display_help];
+			//[self display_help];
 			[self save_ime_settings];
 		}
 		else
@@ -76,6 +81,8 @@
 	
 		view_background_left.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
 		view_background_right.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
+		view_background_left.clipsToBounds = YES;
+		view_background_right.clipsToBounds = YES;
 
 		matrix_left = [[LYButtonMatrixController alloc] initWithFrame:CGRectMake(0, 0, matrix_width, matrix_height) count:30 named:k_filename_settings];
 		matrix_left.delegate = self;
@@ -345,6 +352,30 @@
 		nil];
 }
 
+//	http://grumdrig.com/emoji-list/
+- (void)apply_layout_emoji_001
+{
+	[matrix_left.texts add_objects:
+		@"\U0001f604", @"\U0001f603", @"\U0001f600", @"\U0001f60a", @"\U0000263a", 
+		@"\U0001f609", @"\U0001f60d", @"\U0001f618", @"\U0001f61a", @"\U0001f617", 
+		@"\U0001f619", @"\U0001f61c", @"\U0001f61d", @"\U0001f61b", @"\U0001f633", 
+		@"\U0001f601", @"\U0001f614", @"\U0001f60c", @"\U0001f612", @"\U0001f61e", 
+		@"\U0001f623", @"\U0001f622", @"\U0001f602", @"\U0001f62d", @"\U0001f62a", 
+		@"\U0001f62c", @"\U0001f610", @"\U0001f615", @"\U0001f62f", @"\U0001f636", 
+		//@"CAP", @"dvr", @"lck", @"hlp", @" ",
+		nil];
+	[matrix_right.texts add_objects:
+		@"\U0001f625", @"\U0001f630", @"\U0001f605", @"\U0001f613", @"\U0001f629", 
+		@"\U0001f62b", @"\U0001f628", @"\U0001f631", @"\U0001f620", @"\U0001f621", 
+		@"\U0001f624", @"\U0001f616", @"\U0001f606", @"\U0001f60b", @"\U0001f637", 
+		@"\U0001f60e", @"\U0001f634", @"\U0001f635", @"\U0001f632", @"\U0001f61f", 
+		@"\U0001f626", @"\U0001f627", @"\U0001f608", @"\U0001f47f", @"\U0001f62e", 
+	//	@"\U0001f607", @"\U0001f60f", @"\U0001f611", @"\U0001f472", @"\U0001f473", 
+		@"\U0001f607", @"\U0001f60f", @"\U0001f611", @"++", @"--", 
+		//@" ", @" ", @" ", @" ", @"↵",
+		nil];
+}
+
 - (void)action_key_press:(NSString*)title
 {
 	//	NSLog(@"title: %@", title);
@@ -428,6 +459,10 @@
 	{
 		string = [target perform_string:getter];
 		[target perform_string:setter with:[string stringByAppendingString:title]];
+		if ([target isKindOfClass:[UITextView class]])
+		{
+			[delegate perform_string:@"textViewDidChange:" with:target];
+		}
 		//	[string release];	//	CRASH ME
 		//	NSLog(@"%@", string);
 	}
@@ -444,6 +479,15 @@
 	[UIView commitAnimations];
 	[matrix_left refresh];
 	[matrix_right refresh];
+
+	CGRect rect = view_background_left.frame;
+	//rect.size.height = 100;
+	NSDictionary* dict = [NSDictionary dictionaryWithObjectsAndKeys:
+		[NSValue valueWithCGRect:rect],
+		UIKeyboardBoundsUserInfoKey,
+		nil];
+	NSNotification* notification = [NSNotification notificationWithName:UIKeyboardDidShowNotification object:nil userInfo:dict];
+	[[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (void)action_ime
@@ -462,6 +506,7 @@
 		else
 			[button_ime set_title:@" ↓"];
 		[self show];
+		[self resize_keyboard];
 	}
 	else if ([[button_ime titleForState:UIControlStateNormal] isEqualToString:@"sys"])
 	{
@@ -494,6 +539,39 @@
 - (void)display_help
 {
 	[@"About Keyboard+" show_alert_message:@"To enable Keyboard+, tap the US flag button. Keyboard+ allows you to switch between insert mode, edit mode, and view mode. In insert mode, you can switch between Qwerty and Dvorak layouts, or even create your own layout by using the lock/unlock (lck) button.\n\nThis message will be shown during the first time you run this app. To view it again, please press the help (hlp) button."];
+}
+
+- (void)set_button_toggle:(UIButton*)button
+{
+	button_ime.hidden = YES;
+	[data key:@"button-ime-toggle" v:button];
+	[button addTarget:self action:@selector(action_ime_toggle:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)action_ime_toggle:(UIButton*)button
+{
+	if (button.selected)
+	{
+		button.selected = NO;
+		if ([target isKindOfClass:[UITextView class]])
+		{
+			[(UITextView*)target setEditable:YES];
+			[(UITextView*)target becomeFirstResponder];
+		}
+		[self hide];
+	}
+	else
+	{
+		button.selected = YES;
+		[target perform_string:@"resignFirstResponder"];
+		if ([target isKindOfClass:[UITextView class]])
+		{
+			[(UITextView*)target setEditable:NO];
+			[(UITextView*)target resignFirstResponder];
+		}
+		[self show];
+		[self resize_keyboard];
+	}
 }
 
 @end

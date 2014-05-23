@@ -190,6 +190,42 @@
 	return NO;
 }
 
+- (void)delete_files:(NSString*)keyword day:(int)day
+{
+	[self delete_files:keyword second:day * 24 * 60 * 60];
+}
+
+- (void)delete_files:(NSString*)keyword second:(int)second
+{
+	NSString* path = self;
+
+	//Delete files by iterating items of the folder.
+	NSFileManager* fm = [[[NSFileManager alloc] init] autorelease];
+	NSDirectoryEnumerator* en = [fm enumeratorAtPath:path];    
+	NSError* err = nil;
+	BOOL res;
+
+	NSString* file;
+	while (file = [en nextObject]) 
+	{
+		file = [path stringByAppendingPathComponent:file];
+		NSDate* time_created = [[fm attributesOfItemAtPath:file error:&err] fileCreationDate];
+		NSDate* time_old = [[NSDate date] dateByAddingTimeInterval:(-1 * second)];
+
+		//NSLog(@"FILE deleting %@: %@\n%@\n%@\nerror: %@\n\n", keyword, file, time_created, time_old, err);
+		if (([time_created compare:time_old] == NSOrderedAscending) && [file has_substring:keyword])
+		{
+			res = [fm removeItemAtPath:file error:&err];
+			if (!res && err) 
+				NSLog(@"FILE delete error: %@", err);
+			else
+				NSLog(@"FILE deleted: %@", file);
+		}
+		else
+			NSLog(@"FILE deleted: not old enough");
+	}
+}
+
 //	TODO: merge methods
 - (BOOL)file_backup_private
 {
@@ -222,16 +258,26 @@
 	return [[NSString stringWithFormat:@"%@/%@", dest, self] file_backup];
 }
 
-- (NSArray*)list_documents
++ (NSArray*)list_documents
 {
 	NSFileManager* manager = [NSFileManager defaultManager];
 	return [manager contentsOfDirectoryAtPath:[@"" filename_documents] error:nil];
 }
 
-- (NSArray*)list_private
+- (NSArray*)list_documents
+{
+	return [NSString list_documents];
+}
+
++ (NSArray*)list_private
 {
 	NSFileManager* manager = [NSFileManager defaultManager];
 	return [manager contentsOfDirectoryAtPath:[@"" filename_private] error:nil];
+}
+
+- (NSArray*)list_private
+{
+	return [NSString list_private];
 }
 
 #ifdef LY_ENABLE_APP_ZIP
@@ -683,9 +729,11 @@
 - (void)play_caf
 {
 #ifdef LY_ENABLE_OBJECTAL	
-	[[ly.data v:@"oal-audio"] playEffect:[NSString stringWithFormat:self]];
+	NSLog(@"OOA");
+	[[ly.data v:@"oal-audio"] playEffect:self];	//[NSString stringWithFormat:self]];
 #endif
 #ifdef LY_ENABLE_OPENAL
+	NSLog(@"OPENAL");
 	se_play_caf(self);
 #endif
 }

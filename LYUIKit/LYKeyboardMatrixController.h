@@ -51,12 +51,19 @@
 	NSString*	setter;			//	setText:, etc.
 	NSString*	getter;			//	text, etc.
 	UIButton*	button_ime;
+
+	NSMutableDictionary*	data;
 }
 @property (nonatomic, retain) NSString*			string;
 @property (nonatomic, retain) id				target;
 @property (nonatomic, retain) NSString*			setter;
 @property (nonatomic, retain) NSString*			getter;
 @property (nonatomic, retain) UIButton*			button_ime;
+@property (nonatomic, retain) NSString*			current_keyboard_layout;
+@property (nonatomic, retain) NSString*			current_keyboard_status;
+@property (nonatomic, retain) NSMutableDictionary*	data;
+@property (nonatomic, retain) UIViewController*		controller_left;
+@property (nonatomic, retain) UIViewController*		controller_right;
 
 - (id)initWithDelegate:(id)obj;
 - (void)apply_keyboard_layout;
@@ -69,5 +76,9 @@
 - (void)action_ime;
 - (void)save_ime_settings;
 - (CGFloat)get_screen_height;
+
+- (void)set_button_toggle:(UIButton*)button;
+
+- (void)apply_layout_emoji_001;
 
 @end

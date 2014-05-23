@@ -11,12 +11,19 @@
 	NSString*			filename;
 	BOOL				is_downloading;
 	id					delegate;
+	int					progress;
+	UIViewContentMode	mode;
+	CGFloat				scale;
 }
-@property (retain, nonatomic) id	delegate;
+@property (retain, nonatomic) id			delegate;
+@property (retain, nonatomic) NSString*		placeholder;
+@property (nonatomic) UIViewContentMode		mode;
+@property (nonatomic) CGFloat				scale;
 
 - (void)load_url:(NSString *)theUrlString;
 
 @end
+
 
 //	TODO: combine these two classes
 @interface LYAsyncButton: UIButton 

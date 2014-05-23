@@ -9,6 +9,8 @@
 - (void)draw_frame_white;
 - (void)draw_cross_black;
 - (void)draw_cross_white;
+- (void)set_mask_circle;
+- (void)set_border_circle;
 - (void)clock_flip;
 
 @end

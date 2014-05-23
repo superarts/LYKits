@@ -22,6 +22,7 @@
 #import "LYNavigationItem.h"
 #import "LYBarButtonItem.h"
 #import "LYTableViewCell.h"
+#import "UIActionSheet+Blocks.h"
 
 /*
  * enable the macros below to enable navigation background, rotation, etc.

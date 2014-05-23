@@ -142,12 +142,15 @@
 		[data setValue:[NSMutableArray array] forKey:@"badge-array"];
 		[data setValue:[NSMutableArray array] forKey:@"badge2-array"];
 		[data setValue:[NSMutableArray array] forKey:@"filter-array"];
+		//[data setValue:[NSMutableDictionary array] forKey:@"cells"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-subviews"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-gestures"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-heights"];
+		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-image-overlay"];
 		[data setValue:@"Loading..." forKey:@"refresh-text"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"refresh-disable-bg"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"cell-disable-blank"];	//	disable blank sections
+		//[data setValue:[NSNumber numberWithBool:NO] forKey:@"cell-disable-interaction"];
 		[data setValue:@"ly_transparent_64x64.png" forKey:@"image-placeholder"];
 		[data setValue:nil forKey:@"source-deleted-object"];
 		[data setValue:nil forKey:@"source-delete-hint"];
@@ -160,8 +163,10 @@
 		[data setValue:nil forKey:@"cell-cap-bottom"];
 		[data setValue:nil forKey:@"cell-swipe-view"];
 		[data setValue:nil forKey:@"cell-swipe-action"];
+		[data setValue:@"fade" forKey:@"cell-swipe-style"];
 		[data setValue:nil forKey:@"action-load-more"];
 		[data setValue:nil forKey:@"action-ego-refresh"];
+		[data setValue:[NSNumber numberWithBool:NO] forKey:@"flag-enable-didselect-provider"];
 		[data setValue:[NSMutableDictionary dictionary] forKey:@"cell-swipe-enable"];
 		[data setValue:[NSNumber numberWithBool:NO] forKey:@"source-delete-delegate"];
 		//	[data setValue:nil forKey:@"source-deleted-row"];
@@ -267,6 +272,18 @@
 		//[activity set_y:-10];
 		//[activity reset_height:20];
 		view.tableFooterView = activity_more;
+
+		is_swiped		= NO;
+		view_swiped		= nil;
+
+		//	XXX hack
+#if 0 
+		hack_view_mask = [[UIView alloc] initWithFrame:CGRectMake([ly screen_width] - 5, 0, 5, 70)];
+		hack_view_mask.backgroundColor = [UIColor whiteColor];
+		UIView* view_separator = [[UIView alloc] initWithFrame:CGRectMake(0, 69.5, 5, 0.5)];
+		view_separator.backgroundColor = [UIColor lightGrayColor];
+		[hack_view_mask addSubview:view_separator];
+#endif
 	}
 	return self;
 }
@@ -274,6 +291,7 @@
 - (void)enable_ego_refresh:(NSString*)action
 {
 #ifdef LY_ENABLE_EGOREFRESH
+	//	action needs to call table_reload_done after it finishes loading
 	[data key:@"action-ego-refresh" v:action];
 	if (ego_header == nil) 
 	{
@@ -446,6 +464,18 @@
 	UIView* additional_view = [self get_additional_view:path];
 	NSNumber* number = [[data v:@"cell-heights"] objectForKey:path];
 
+	//	TODO: the code below is for ios7
+	if (number == nil)
+	{
+		for (NSIndexPath* key in [data v:@"cell-heights"]) 
+		{
+			number = [[data v:@"cell-heights"] objectForKey:key];
+			if ((key.section == path.section) && (key.row == path.row))
+				break;
+		}
+	}
+
+	//NSLog(@"height %i, %@ - %@, %@", path.row, number, path, [data v:@"cell-heights"]);
 	if (additional_view != nil)
 	{
 		array = [texts objectAtIndex:path.section];
@@ -515,6 +545,13 @@
 		else
 			cell = [[[NSClassFromString([data v:@"cell-class"]) alloc] initWithStyle:style reuseIdentifier:nil] autorelease];
 
+		//cell.contentView.userInteractionEnabled = ![[data v:@"cell-disable-interaction"] boolValue];
+		//cell.userInteractionEnabled = NO;
+#if 0
+		cell.indentationWidth = 100;
+		cell.indentationLevel = 1;
+#endif
+
 		text		= [texts object_at_path:indexPath];
 		detail		= [details object_at_path:indexPath];
 		image		= [images object_at_path:indexPath];
@@ -566,6 +603,9 @@
 				image_view.contentMode = cell_image_mode;
 				//[image_view autoresizing_add_width:YES height:YES];
 				image_view.clipsToBounds = YES;
+
+				//	TODO: add flag!
+				[image_view set_mask_circle];
 				[image_view load_url:image_url];
 				if ([cell_image_place isEqualToString:@"image"])
 					[cell.imageView addSubview:image_view];
@@ -574,6 +614,24 @@
 				else
 					NSLog(@"TABLE warning: unknown cell image place");
 				//	NSLog(@"table image url: %@\n%@", image_url, image_view);
+				
+				//	add overlay
+#if 0
+				if (image_view_overlay != nil)
+					[image_view_overlay removeFromSuperview];
+#endif
+				NSString* overlay_url = [[data v:@"cell-image-overlay"] objectForKey:indexPath];
+				if (overlay_url != nil)
+				{
+					LYAsyncImageView* image_view_overlay;
+					CGFloat overlay_r = image_view.frame.size.width / 2;
+					image_view_overlay = [[LYAsyncImageView alloc] initWithFrame:
+						CGRectMake(image_view.frame.origin.x + overlay_r - 1, image_view.frame.origin.y + overlay_r - 1, overlay_r + 2, overlay_r + 2)];
+					image_view_overlay.placeholder = @"ly_transparent_36x36";
+					[image_view_overlay load_url:overlay_url];
+					[image_view_overlay set_border_circle];
+					[image_view.superview addSubview:image_view_overlay];
+				}
 			}
 #if 1
 			if (([[data v:@"badge-image"] isHidden] == NO) &&
@@ -628,6 +686,8 @@
 			{
 				if ([accessory is:@"default"])
 					cell.accessoryType = accessory_type;
+				else if ([accessory is:@"indicator"])
+					cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 				else if ([accessory is:@"checkmark"])
 					cell.accessoryType = UITableViewCellAccessoryCheckmark;
 				else if ([accessory is:@"none"])
@@ -665,8 +725,8 @@
 
 			if (([data v:@"cell-swipe-view"] != nil) && (![swipe_enable isEqual:[NSNumber numberWithBool:false]]))
 			{
-				UISwipeGestureRecognizer* gesture_swipe_left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view:)];
-				UISwipeGestureRecognizer* gesture_swipe_right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view:)];
+				UISwipeGestureRecognizer* gesture_swipe_left = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view_left:)];
+				UISwipeGestureRecognizer* gesture_swipe_right = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(toggle_swipe_view_right:)];
 				gesture_swipe_left.direction = UISwipeGestureRecognizerDirectionLeft;
 				gesture_swipe_right.direction = UISwipeGestureRecognizerDirectionRight;
 				[cell addGestureRecognizer:gesture_swipe_left];
@@ -678,7 +738,18 @@
 		{
 			if (([[texts object_at_index:indexPath.section] count] == 1) && (cell_bg != nil))
 			{
-				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg];
+				//cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_selected];
+				UIImage* image = [UIImage imageNamed:cell_bg];
+				NSString* s = [data v:@"cell-cap-bg"];
+				UIEdgeInsets edge;
+				if (s != nil)
+				{
+					edge = UIEdgeInsetsFromString(s);
+					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
+				}
+				cell.backgroundView = [[UIImageView alloc] initWithImage:image];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_selected];
 			}
 			else if ((indexPath.row == 0) && (cell_bg_top != nil))
@@ -720,12 +791,21 @@
 					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
 				}
 				cell.backgroundView = [[UIImageView alloc] initWithImage:image];
-				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_middle];
+				//cell.backgroundView = [[UIImageView alloc] initWithImage:cell_bg_middle];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_middle_selected];
 			}
 			else if (cell_bg != nil)
 			{
-				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg];
+				UIImage* image = [UIImage imageNamed:cell_bg];
+				NSString* s = [data v:@"cell-cap-bg"];
+				UIEdgeInsets edge;
+				if (s != nil)
+				{
+					edge = UIEdgeInsetsFromString(s);
+					image = [image stretchableImageWithLeftCapWidth:edge.left topCapHeight:edge.top];
+				}
+				cell.backgroundView = [[UIImageView alloc] initWithImageNamed:image];
+				//cell.backgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg];
 				cell.selectedBackgroundView = [[UIImageView alloc] initWithImageNamed:cell_bg_selected];
 			}
 		}
@@ -751,47 +831,145 @@
 	return cell;
 }
 
-- (void)toggle_swipe_view:(UISwipeGestureRecognizer*)gesture
+- (void)toggle_swipe_view_left:(UISwipeGestureRecognizer*)gesture
 {
 	UIView* the_view;
 	the_view = [data v:@"cell-swipe-view"];
+	if (the_view.hidden == YES)
+		[self toggle_swipe_view:gesture];
+}
+
+- (void)toggle_swipe_view_right:(UISwipeGestureRecognizer*)gesture
+{
+	UIView* the_view;
+	the_view = [data v:@"cell-swipe-view"];
+	if (the_view.hidden == NO)
+		[self toggle_swipe_view:gesture];
+}
+
+//	XXX hack
+- (void)toggle_swipe_view_hack
+{
+	NSLog(@"TABLE swipe HACK: %@", self);
+	[self toggle_swipe_view:current_swipe_gesture];
+}
+
+- (void)toggle_swipe_view:(UISwipeGestureRecognizer*)gesture
+{
+	BOOL tmp_is_swiped = is_swiped;
+	BOOL tmp_view_swiped = (view_swiped != gesture.view);
+
+	if ((is_swiped && (view_swiped != gesture.view)))// || (current_swipe_gesture == nil))
+	{
+		NSLog(@"TABLE swipe view toggle aborted");
+		return;
+	}
+
+	current_swipe_gesture = gesture;
+
+	[data setObject:gesture forKey:@"current-swipe-gesture"];
+	UIView* the_view;
+	the_view = [data v:@"cell-swipe-view"];
+	NSString* style = [data v:@"cell-swipe-style"];
+	if (gesture != nil)
+	{
+		view_swiped = gesture.view;
+	}
+
 #if 0
 	the_view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 120)];
 	the_view.backgroundColor = [UIColor blueColor];
 #endif
-	//the_view.frame = CGRectMake(20, 0, 300, gesture.view.frame.size.height - 10);
-	[the_view set_x:(320 - the_view.frame.size.width) / 2];
-	[the_view set_y:0];
-	[the_view set_h:gesture.view.frame.size.height - 6];
-	//[the_view set_h:gesture.view.frame.size.height];
-	if (the_view.superview == nil)
-		the_view.alpha = 0;
-	if (the_view.alpha == 0)
+	//the_view.frame = CGRectMake(20, 0, 300, view_swiped.frame.size.height - 10);
+	//[the_view set_x:(320 - the_view.frame.size.width) / 2];
+	if ([style is:@"fade"])
 	{
+		[the_view set_x:([ly screen_width] - the_view.frame.size.width) / 2];
+		[the_view set_y:0];
+		[the_view set_h:view_swiped.frame.size.height - 8];
+		//NSLog(@"CELL swipe height: %f", view_swiped.frame.size.height - 8);
+	}
+	else if ([style is:@"move"])
+	{
+		[the_view set_x:[ly screen_width] - the_view.frame.size.width];
+		[the_view set_y:view_swiped.frame.origin.y];
+		[the_view set_h:view_swiped.frame.size.height];
+	}
+	//[the_view set_h:view_swiped.frame.size.height];
+	if (the_view.superview == nil)
+	{
+		the_view.hidden = YES;
+		if ([style is:@"fade"])
+			the_view.alpha = 0;
+	}
+	//	if (the_view.alpha == 0)
+	//tmp_is_swiped =	the_view.hidden;
+	is_swiped =	the_view.hidden;
+	if (the_view.hidden == YES)
+	{
+		NSLog(@"SWIPE show");
 		//the_view.backgroundColor = [UIColor whiteColor];
-		[gesture.view addSubview:the_view];
-		//[gesture.view bringSubviewToFront:the_view];
+		[view_swiped.superview addSubview:the_view];
+		[view_swiped.superview bringSubviewToFront:view_swiped];
+		//[view_swiped bringSubviewToFront:the_view];
 		//the_view.alpha = 0;
+		hack_view_mask.alpha = 0;
 		[UIView begin_animations:0.3];
-		the_view.alpha = 1;
+
+		the_view.hidden = NO;
+		if ([style is:@"fade"])
+			the_view.alpha = 1;
+		else if ([style is:@"move"])
+		{
+			[view_swiped reset_x:0 - the_view.frame.size.width];
+			//	XXX hack
+			[view_swiped addSubview:hack_view_mask];
+			hack_view_mask.alpha = 1;
+		}
+
 		[UIView commitAnimations];
-		NSString* s =  [data v:@"cell-swipe-action"];
+		NSString* s = [data v:@"cell-swipe-action"];
 		//NSLog(@"swipe view: %@\naction: %@", the_view, s);
 		if (s != nil)
-			[delegate perform_string:s with:gesture.view with:self];
+			[delegate perform_string:s with:view_swiped with:self];
 	}
-	else if (the_view.alpha == 1)
+	else	//if (the_view.alpha == 1)
 	{
+		NSLog(@"SWIPE hide: %@", view_swiped);
 		[UIView begin_animations:0.3];
-		the_view.alpha = 0;
+
+		//the_view.hidden = YES;
+		if ([style is:@"fade"])
+			the_view.alpha = 0;
+		else if ([style is:@"move"])
+		{
+			[view_swiped reset_x:the_view.frame.size.width];
+			//	XXX hack
+			hack_view_mask.alpha = 0;
+		}
+
 		[UIView commitAnimations];
 		[self performSelector:@selector(toggle_swipe_view_end) withObject:nil afterDelay:0.3];
 	}
+	[delegate perform_string:@"table_swiped:swiped:" with:self with:[NSNumber numberWithBool:is_swiped]];
+	//is_swiped = tmp_is_swiped;
+#if 0
+	NSLog(@"xxxxxx %i, %i", tmp_is_swiped, tmp_view_swiped);
+	if ((is_swiped && (view_swiped != gesture.view)))// || (current_swipe_gesture == nil))
+		NSLog(@"XXXXXXXXXXXX abort");
+	else
+		NSLog(@"XXXXXXXXXXXX ok");
+#endif
 }
 
 - (void)toggle_swipe_view_end
 {
+	[[data v:@"cell-swipe-view"] setHidden:YES];
 	[[data v:@"cell-swipe-view"] removeFromSuperview];
+
+	//	XXX hack
+	if ([[data v:@"cell-swipe-style"] is:@"move"])
+		[hack_view_mask removeFromSuperview];
 }
 
 #if 1
@@ -831,6 +1009,7 @@
 	else
 		cell.textLabel.backgroundColor = [UIColor clearColor];
 
+	cell.detailTextLabel.frame = CGRectMake(100, 20, 200,22);
 	if (detail_label.hidden == NO)
 		[cell.detailTextLabel copy_style:detail_label];
 	else
@@ -844,6 +1023,16 @@
 	if ([[data v:@"state"] is:@"refresh"])
 		return;
 
+#if 0
+	UIView* the_view;
+	the_view = [data v:@"cell-swipe-view"];
+	if (the_view.hidden == NO)
+	{
+		[self toggle_swipe_view:nil];
+		return;
+	}
+#endif
+
 	NSIndexPath* path;
 	if (backup_dict != nil)
 		path = [backup_dict objectForKey:a_path];
@@ -856,7 +1045,10 @@
 	current_path = path;
 	current_text = [texts object_at_path:path];
 	[table deselectRowAtIndexPath:a_path animated:YES];
-	[delegate perform_string:@"tableView:didSelectRowAtIndexPath:" with:table with:path];
+	if ([[data v:@"flag-enable-didselect-provider"] boolValue])
+		[delegate perform_string:@"tableViewProvider:didSelectRowAtIndexPath:" with:self with:path];
+	else
+		[delegate perform_string:@"tableView:didSelectRowAtIndexPath:" with:table with:path];
 }
 
 - (void)tableView:(UITableView*)table accessoryButtonTappedForRowWithIndexPath:(NSIndexPath*)a_path
@@ -1248,7 +1440,7 @@
 #endif
 	if (([scrollView contentOffset].y + scrollView.frame.size.height) == [scrollView contentSize].height) 
 	{
-		//	NSLog(@"bottom");
+		//	NSLog(@"TABLE bottom");
 		NSString* action = [data v:@"action-load-more"];
 		if (action != nil)
 		{
@@ -1655,6 +1847,8 @@
 {
 	[button_mask set_height:view.contentSize.height];
 	[view addSubview:button_mask];
+	view.scrollEnabled = NO;
+	NSLog(@"TABLE scroll disabled");
 }
 
 - (void)action_search_resign
@@ -1672,6 +1866,8 @@
 	[UIView commitAnimations];
 	[search resignFirstResponder];
 	[button_mask removeFromSuperview];
+	view.scrollEnabled = YES;
+	NSLog(@"TABLE scroll enabled");
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar*)search
@@ -1682,6 +1878,8 @@
 	[search resignFirstResponder];
 	self.view.contentOffset = CGPointMake(0, -44);
 	[button_mask removeFromSuperview];
+	view.scrollEnabled = YES;
+	NSLog(@"TABLE scroll enabled");
 }
 
 #pragma mark async refresh

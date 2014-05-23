@@ -55,6 +55,8 @@
 - (id)initWithNav:(UINavigationController*)a_nav;
 //- (void)init_data;
 
+- (void)push_table;
+- (void)present_table;
 - (void)show_table;
 - (void)show_picker;
 

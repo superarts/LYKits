@@ -53,6 +53,10 @@
 - (BOOL)file_backup_to:(NSString*)dest;
 - (NSArray*)list_documents;
 - (NSArray*)list_private;
+//	delete files that are older than...
+//	[[@"" filename_private] delete_files:@".jpg" day:7];
+- (void)delete_files:(NSString*)keyword day:(int)day;
+- (void)delete_files:(NSString*)keyword second:(int)second;
 #ifdef LY_ENABLE_APP_ZIP
 - (BOOL)unzip_to:(NSString*)dest;
 - (NSArray*)zip_content_array;

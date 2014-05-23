@@ -48,6 +48,8 @@
 		provider_table = [[LYTableViewProvider alloc] initWithTableView:table];
 		provider_table.cell_height = 48;
 		provider_table.delegate = self;
+		provider_table.text_label.font = [UIFont fontWithName:@"HelveticaNeue-light" size:16];
+		provider_table.text_label.hidden = NO;
 		[provider_table.texts add_array:@"No Entry", nil];
 		[provider_table.accessories add_array:nil];
 	}
@@ -156,12 +158,27 @@
 	}
 }
 
+- (void)present_table
+{
+	[self show_table];
+}
+
 - (void)show_table
 {
+	[self.view addSubview:bar_table];
 	mode = @"table";
 	[self.view remove_subviews];
 	[self.view addSubview:view_table];
 	[controller_parent presentModalViewController:self animated:YES];
+}
+
+- (void)push_table
+{
+	[bar_table removeFromSuperview];
+	mode = @"table-push";
+	[self.view remove_subviews];
+	[self.view addSubview:view_table];
+	[controller_parent pushViewController:self animated:YES];
 }
 
 - (void)show_picker
@@ -219,6 +236,10 @@
 	{
 		[controller_parent dismissModalViewControllerAnimated:YES];
 		//	if ([controller_parent isKindOfClass:NSClassFromString(@"LYScrollTabBarController")]) [controller_parent.view set_y:20];
+	}
+	else if ([mode isEqualToString:@"table-push"])
+	{
+		[controller_parent popViewControllerAnimated:YES];
 	}
 	else
 	{
