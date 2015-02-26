@@ -321,6 +321,19 @@
 	return [array containsObject:self];
 }
 
+- (void)set_mask_circle
+{
+	self.layer.cornerRadius = self.frame.size.width / 2;
+	self.layer.masksToBounds = YES;
+}
+
+- (void)set_border_circle
+{
+	self.layer.borderWidth = 1.0;
+	self.layer.borderColor = [[UIColor whiteColor] CGColor];
+	[self set_mask_circle];
+}
+
 @end
 
 #if 0

@@ -141,7 +141,8 @@
 	UIPageControl* page = [self associated:@"ly-page-control"];
 	if (page != nil)
 	{
-		page.numberOfPages = self.contentInset.right / self.frame.size.width;
+		//page.numberOfPages = self.contentInset.right / self.frame.size.width;
+		page.numberOfPages = self.contentSize.width / self.frame.size.width;
 		page.currentPage = self.contentOffset.x / self.frame.size.width;
 		page.hidesForSinglePage = NO;
 		[page addTarget:self action:@selector(pagecontrol_changed:) forControlEvents:UIControlEventValueChanged];

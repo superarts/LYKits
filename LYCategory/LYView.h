@@ -47,6 +47,9 @@
 - (void)debug_print_subviews:(BOOL)flag_seperator;
 - (BOOL)is_displayed;
 
+- (void)set_mask_circle;
+- (void)set_border_circle;
+
 @end
 #if 0
 @interface UINavigationController (LYViewController)
